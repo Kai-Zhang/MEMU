@@ -22,7 +22,7 @@ TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
 nemu: $(OBJS)
 	$(CC) -o nemu $(OBJS) $(CFLAGS) -lreadline
-	-@git add -A --ignore-errors &> /dev/null # KEEP IT
+	-@git add -A --ignore-errors # KEEP IT
 	-@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
 	-@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT
 
@@ -47,8 +47,8 @@ test: nemu $(TEST_FILE_LIST)
 	bash test.sh $(TEST_FILE_LIST)
 
 
-STU_ID=131220000
-SHARED_FOLDER=~/Templates
+STU_ID=121220137
+SHARED_FOLDER=/mnt/shares
 
 submit: clean
 	cd testcase && make clean
