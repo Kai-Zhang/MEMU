@@ -1,0 +1,153 @@
+
+mov:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00100054 <_start>:
+  100054:	b8 00 00 00 00       	mov    $0x0,%eax
+  100059:	bb 00 00 00 00       	mov    $0x0,%ebx
+  10005e:	b9 00 00 00 00       	mov    $0x0,%ecx
+  100063:	ba 00 00 00 00       	mov    $0x0,%edx
+  100068:	b9 00 80 00 00       	mov    $0x8000,%ecx
+  10006d:	66 bb 00 00          	mov    $0x0,%bx
+  100071:	b7 00                	mov    $0x0,%bh
+  100073:	c7 05 34 12 00 00 01 	movl   $0x1,0x1234
+  10007a:	00 00 00 
+  10007d:	66 c7 05 34 12 00 00 	movw   $0x1,0x1234
+  100084:	01 00 
+  100086:	c6 05 34 12 00 00 01 	movb   $0x1,0x1234
+  10008d:	c7 01 01 00 00 00    	movl   $0x1,(%ecx)
+  100093:	66 c7 01 01 00       	movw   $0x1,(%ecx)
+  100098:	c6 01 01             	movb   $0x1,(%ecx)
+  10009b:	c7 04 99 01 00 00 00 	movl   $0x1,(%ecx,%ebx,4)
+  1000a2:	66 c7 04 99 01 00    	movw   $0x1,(%ecx,%ebx,4)
+  1000a8:	c6 04 99 01          	movb   $0x1,(%ecx,%ebx,4)
+  1000ac:	c7 41 02 01 00 00 00 	movl   $0x1,0x2(%ecx)
+  1000b3:	66 c7 41 02 01 00    	movw   $0x1,0x2(%ecx)
+  1000b9:	c6 41 02 01          	movb   $0x1,0x2(%ecx)
+  1000bd:	c7 41 fe 01 00 00 00 	movl   $0x1,-0x2(%ecx)
+  1000c4:	66 c7 41 fe 01 00    	movw   $0x1,-0x2(%ecx)
+  1000ca:	c6 41 fe 01          	movb   $0x1,-0x2(%ecx)
+  1000ce:	c7 44 99 02 01 00 00 	movl   $0x1,0x2(%ecx,%ebx,4)
+  1000d5:	00 
+  1000d6:	66 c7 44 99 02 01 00 	movw   $0x1,0x2(%ecx,%ebx,4)
+  1000dd:	c6 44 99 02 01       	movb   $0x1,0x2(%ecx,%ebx,4)
+  1000e2:	c7 44 99 fe 01 00 00 	movl   $0x1,-0x2(%ecx,%ebx,4)
+  1000e9:	00 
+  1000ea:	66 c7 44 99 fe 01 00 	movw   $0x1,-0x2(%ecx,%ebx,4)
+  1000f1:	c6 44 99 fe 01       	movb   $0x1,-0x2(%ecx,%ebx,4)
+  1000f6:	c7 81 00 20 00 00 01 	movl   $0x1,0x2000(%ecx)
+  1000fd:	00 00 00 
+  100100:	66 c7 81 00 20 00 00 	movw   $0x1,0x2000(%ecx)
+  100107:	01 00 
+  100109:	c6 81 00 20 00 00 01 	movb   $0x1,0x2000(%ecx)
+  100110:	c7 81 00 e0 ff ff 01 	movl   $0x1,-0x2000(%ecx)
+  100117:	00 00 00 
+  10011a:	66 c7 81 00 e0 ff ff 	movw   $0x1,-0x2000(%ecx)
+  100121:	01 00 
+  100123:	c6 81 00 e0 ff ff 01 	movb   $0x1,-0x2000(%ecx)
+  10012a:	c7 84 99 00 20 00 00 	movl   $0x1,0x2000(%ecx,%ebx,4)
+  100131:	01 00 00 00 
+  100135:	66 c7 84 99 00 20 00 	movw   $0x1,0x2000(%ecx,%ebx,4)
+  10013c:	00 01 00 
+  10013f:	c6 84 99 00 20 00 00 	movb   $0x1,0x2000(%ecx,%ebx,4)
+  100146:	01 
+  100147:	c7 84 99 00 e0 ff ff 	movl   $0x1,-0x2000(%ecx,%ebx,4)
+  10014e:	01 00 00 00 
+  100152:	66 c7 84 99 00 e0 ff 	movw   $0x1,-0x2000(%ecx,%ebx,4)
+  100159:	ff 01 00 
+  10015c:	c6 84 99 00 e0 ff ff 	movb   $0x1,-0x2000(%ecx,%ebx,4)
+  100163:	01 
+  100164:	89 c3                	mov    %eax,%ebx
+  100166:	66 89 c3             	mov    %ax,%bx
+  100169:	88 e3                	mov    %ah,%bl
+  10016b:	a3 34 12 00 00       	mov    %eax,0x1234
+  100170:	66 a3 34 12 00 00    	mov    %ax,0x1234
+  100176:	a2 34 12 00 00       	mov    %al,0x1234
+  10017b:	88 25 34 12 00 00    	mov    %ah,0x1234
+  100181:	89 03                	mov    %eax,(%ebx)
+  100183:	89 04 99             	mov    %eax,(%ecx,%ebx,4)
+  100186:	66 89 04 99          	mov    %ax,(%ecx,%ebx,4)
+  10018a:	88 24 99             	mov    %ah,(%ecx,%ebx,4)
+  10018d:	89 41 02             	mov    %eax,0x2(%ecx)
+  100190:	66 89 41 02          	mov    %ax,0x2(%ecx)
+  100194:	88 61 02             	mov    %ah,0x2(%ecx)
+  100197:	89 44 99 02          	mov    %eax,0x2(%ecx,%ebx,4)
+  10019b:	66 89 44 99 02       	mov    %ax,0x2(%ecx,%ebx,4)
+  1001a0:	88 64 99 02          	mov    %ah,0x2(%ecx,%ebx,4)
+  1001a4:	89 81 00 20 00 00    	mov    %eax,0x2000(%ecx)
+  1001aa:	66 89 81 00 20 00 00 	mov    %ax,0x2000(%ecx)
+  1001b1:	88 a1 00 20 00 00    	mov    %ah,0x2000(%ecx)
+  1001b7:	89 84 99 00 20 00 00 	mov    %eax,0x2000(%ecx,%ebx,4)
+  1001be:	66 89 84 99 00 20 00 	mov    %ax,0x2000(%ecx,%ebx,4)
+  1001c5:	00 
+  1001c6:	88 a4 99 00 20 00 00 	mov    %ah,0x2000(%ecx,%ebx,4)
+  1001cd:	89 d3                	mov    %edx,%ebx
+  1001cf:	66 89 d3             	mov    %dx,%bx
+  1001d2:	88 f3                	mov    %dh,%bl
+  1001d4:	89 15 34 12 00 00    	mov    %edx,0x1234
+  1001da:	66 89 15 34 12 00 00 	mov    %dx,0x1234
+  1001e1:	88 15 34 12 00 00    	mov    %dl,0x1234
+  1001e7:	88 35 34 12 00 00    	mov    %dh,0x1234
+  1001ed:	89 13                	mov    %edx,(%ebx)
+  1001ef:	89 14 99             	mov    %edx,(%ecx,%ebx,4)
+  1001f2:	66 89 14 99          	mov    %dx,(%ecx,%ebx,4)
+  1001f6:	88 34 99             	mov    %dh,(%ecx,%ebx,4)
+  1001f9:	89 51 02             	mov    %edx,0x2(%ecx)
+  1001fc:	66 89 51 02          	mov    %dx,0x2(%ecx)
+  100200:	88 71 02             	mov    %dh,0x2(%ecx)
+  100203:	89 54 99 02          	mov    %edx,0x2(%ecx,%ebx,4)
+  100207:	66 89 54 99 02       	mov    %dx,0x2(%ecx,%ebx,4)
+  10020c:	88 74 99 02          	mov    %dh,0x2(%ecx,%ebx,4)
+  100210:	89 91 00 20 00 00    	mov    %edx,0x2000(%ecx)
+  100216:	66 89 91 00 20 00 00 	mov    %dx,0x2000(%ecx)
+  10021d:	88 b1 00 20 00 00    	mov    %dh,0x2000(%ecx)
+  100223:	89 94 99 00 20 00 00 	mov    %edx,0x2000(%ecx,%ebx,4)
+  10022a:	66 89 94 99 00 20 00 	mov    %dx,0x2000(%ecx,%ebx,4)
+  100231:	00 
+  100232:	88 b4 99 00 20 00 00 	mov    %dh,0x2000(%ecx,%ebx,4)
+  100239:	a1 34 12 00 00       	mov    0x1234,%eax
+  10023e:	66 a1 34 12 00 00    	mov    0x1234,%ax
+  100244:	a0 34 12 00 00       	mov    0x1234,%al
+  100249:	8a 25 34 12 00 00    	mov    0x1234,%ah
+  10024f:	8b 03                	mov    (%ebx),%eax
+  100251:	8b 04 99             	mov    (%ecx,%ebx,4),%eax
+  100254:	66 8b 04 99          	mov    (%ecx,%ebx,4),%ax
+  100258:	8a 24 99             	mov    (%ecx,%ebx,4),%ah
+  10025b:	8b 41 02             	mov    0x2(%ecx),%eax
+  10025e:	66 8b 41 02          	mov    0x2(%ecx),%ax
+  100262:	8a 61 02             	mov    0x2(%ecx),%ah
+  100265:	8b 44 99 02          	mov    0x2(%ecx,%ebx,4),%eax
+  100269:	66 8b 44 99 02       	mov    0x2(%ecx,%ebx,4),%ax
+  10026e:	8a 64 99 02          	mov    0x2(%ecx,%ebx,4),%ah
+  100272:	8b 81 00 20 00 00    	mov    0x2000(%ecx),%eax
+  100278:	66 8b 81 00 20 00 00 	mov    0x2000(%ecx),%ax
+  10027f:	8a a1 00 20 00 00    	mov    0x2000(%ecx),%ah
+  100285:	8b 84 99 00 20 00 00 	mov    0x2000(%ecx,%ebx,4),%eax
+  10028c:	66 8b 84 99 00 20 00 	mov    0x2000(%ecx,%ebx,4),%ax
+  100293:	00 
+  100294:	8a a4 99 00 20 00 00 	mov    0x2000(%ecx,%ebx,4),%ah
+  10029b:	8b 15 34 12 00 00    	mov    0x1234,%edx
+  1002a1:	66 8b 15 34 12 00 00 	mov    0x1234,%dx
+  1002a8:	8a 15 34 12 00 00    	mov    0x1234,%dl
+  1002ae:	8a 35 34 12 00 00    	mov    0x1234,%dh
+  1002b4:	8b 13                	mov    (%ebx),%edx
+  1002b6:	8b 14 99             	mov    (%ecx,%ebx,4),%edx
+  1002b9:	66 8b 14 99          	mov    (%ecx,%ebx,4),%dx
+  1002bd:	8a 34 99             	mov    (%ecx,%ebx,4),%dh
+  1002c0:	8b 51 02             	mov    0x2(%ecx),%edx
+  1002c3:	66 8b 51 02          	mov    0x2(%ecx),%dx
+  1002c7:	8a 71 02             	mov    0x2(%ecx),%dh
+  1002ca:	8b 54 99 02          	mov    0x2(%ecx,%ebx,4),%edx
+  1002ce:	66 8b 54 99 02       	mov    0x2(%ecx,%ebx,4),%dx
+  1002d3:	8a 74 99 02          	mov    0x2(%ecx,%ebx,4),%dh
+  1002d7:	8b 91 00 20 00 00    	mov    0x2000(%ecx),%edx
+  1002dd:	66 8b 91 00 20 00 00 	mov    0x2000(%ecx),%dx
+  1002e4:	8a b1 00 20 00 00    	mov    0x2000(%ecx),%dh
+  1002ea:	8b 94 99 00 20 00 00 	mov    0x2000(%ecx,%ebx,4),%edx
+  1002f1:	66 8b 94 99 00 20 00 	mov    0x2000(%ecx,%ebx,4),%dx
+  1002f8:	00 
+  1002f9:	8a b4 99 00 20 00 00 	mov    0x2000(%ecx,%ebx,4),%dh
+  100300:	b8 00 00 00 00       	mov    $0x0,%eax
+  100305:	82                   	.byte 0x82
