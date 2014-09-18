@@ -11,8 +11,8 @@
  * For more details about the GPR encoding scheme, see i386 manual.
  */
 
-typedef struct {
-	struct {
+typedef union {
+	union {
 		uint32_t _32;
 		uint16_t _16;
 		uint8_t _8[2];
@@ -23,7 +23,9 @@ typedef struct {
 	 * See i386 manual for more details.
 	 */
 
-	uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+	struct {
+		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+	};
 
 
 
