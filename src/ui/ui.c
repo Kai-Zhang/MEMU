@@ -129,7 +129,7 @@ void main_loop() {
 				printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
 				printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
 			} else {
-				printf("No explicit command for %s, try \"info\" for more details.\n", arg);
+				printf("No explicit command for \"%s\", try \"info\" for more details.\n", arg);
 			}
 		}
 
