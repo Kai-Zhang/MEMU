@@ -120,15 +120,15 @@ void main_loop() {
 				puts("info registers		-- List of integer registers and their contents");
 			}
 			if(strcmp(arg, "registers") == 0 || strcmp(arg, "r") == 0) {
-				printf("eax\t%8x\t%d\n", reg_l(R_EAX), reg_l(R_EAX));
-				printf("ecx\t%8x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
-				printf("edx\t%8x\t%d\n", reg_l(R_EDX), reg_l(R_EDX));
-				printf("ebx\t%8x\t%d\n", reg_l(R_EBX), reg_l(R_EBX));
-				printf("esp\t%8x\t%d\n", reg_l(R_ESP), reg_l(R_ESP));
-				printf("ebp\t%8x\t%d\n", reg_l(R_EBP), reg_l(R_EBP));
-				printf("esi\t%8x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
-				printf("edi\t%8x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
-				printf("eip\t%8x\t%d\n", cpu.eip, cpu.eip);
+				printf("eax\t0x%08x\t%d\n", reg_l(R_EAX), reg_l(R_EAX));
+				printf("ecx\t0x%08x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
+				printf("edx\t0x%08x\t%d\n", reg_l(R_EDX), reg_l(R_EDX));
+				printf("ebx\t0x%08x\t%d\n", reg_l(R_EBX), reg_l(R_EBX));
+				printf("esp\t0x%08x\t%d\n", reg_l(R_ESP), reg_l(R_ESP));
+				printf("ebp\t0x%08x\t%d\n", reg_l(R_EBP), reg_l(R_EBP));
+				printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
+				printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
+				printf("eip\t0x%08x\t%d\n", cpu.eip, cpu.eip);
 			}
 		}
 
