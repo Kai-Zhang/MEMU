@@ -105,8 +105,12 @@ void main_loop() {
 		else if(strcmp(p, "q") == 0) { return; }
 		else if(strcmp(p, "si") == 0) {
 			char* step = strtok(NULL, " ");
-			int offset = atoi(step);
-			cmd_si(offset ? offset : 1);
+			if(!step) {
+				cmd_si(1);
+			} else {
+				int offset = atoi(step);
+				cmd_si(offset);
+			}
 		}
 
 		/* TODO: Add more commands */
