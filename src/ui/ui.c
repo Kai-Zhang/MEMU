@@ -129,7 +129,7 @@ static void cmd_x(char* amount_str, char* address_str) {
 	while(amount > 0) {
 		printf("%08x:  ", address & ~0xf);
 		while(blank_count-- > 0) { printf("   "); ++ column; }
-		for(; column < 0xf && amount > 0; ++ column, -- amount) {
+		for(; column < 0x10 && amount > 0; ++ column, -- amount) {
 			printf("%02x ", swaddr_read(address ++, 1));
 		}
 		putchar('\n');
