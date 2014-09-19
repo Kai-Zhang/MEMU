@@ -92,6 +92,51 @@ static void cmd_si(int step) {
 	}
 }
 
+static void cmd_i_r(char* arg) {
+	if (!arg) {
+		puts("\"info\" must be followed by the name of an info command.");
+		puts("List of info subcommands:\n");
+		puts("info registers		-- List of integer registers and their contents");
+	} else if(strcmp(arg, "r") == 0) {
+		printf("eax\t0x%08x\t%d\n", reg_l(R_EAX), reg_l(R_EAX));
+		printf("ecx\t0x%08x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
+		printf("edx\t0x%08x\t%d\n", reg_l(R_EDX), reg_l(R_EDX));
+		printf("ebx\t0x%08x\t%d\n", reg_l(R_EBX), reg_l(R_EBX));
+		printf("esp\t0x%08x\t0x%08x\n", reg_l(R_ESP), reg_l(R_ESP));
+		printf("ebp\t0x%08x\t0x%08x\n", reg_l(R_EBP), reg_l(R_EBP));
+		printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
+		printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
+		printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
+	} else {
+		printf("No explicit command for \"%s\", try \"info\" for more details.\n", arg);
+	}
+}
+
+static void cmd_x(char* amount_str, char* address_str) {
+	if(!amount_str) {
+		puts("Argument required (size of memory and starting display address)");
+		return;
+	}
+	int amount = strtol(amount_str, NULL, 0);
+	if(!address_str) {
+		puts("Syntax error: unrecongized address.");
+		return;
+	}
+	int address = strtol(address_str, NULL, 0);
+
+	int blank_count = address & 0xf;
+	int column = 0;
+	while(amount > 0) {
+		printf("%08x:  ", address & ~0xf);
+		while(blank_count-- > 0) { printf("   "); ++ column; }
+		for(; column < 0xf && amount > 0; ++ column, -- amount) {
+			printf("%02x ", swaddr_read(address ++, 1));
+		}
+		putchar('\n');
+		column = 0;
+	}
+}
+
 void main_loop() {
 	char *cmd;
 	while(1) {
@@ -103,37 +148,25 @@ void main_loop() {
 		if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "q") == 0) { return; }
-		else if(strcmp(p, "si") == 0) {
-			char* step = strtok(NULL, " ");
-			if(!step) {
-				cmd_si(1);
-			} else {
-				int offset = atoi(step);
-				cmd_si(offset);
-			}
-		}
-		else if(strcmp(p, "info") == 0 || strcmp(p, "i") == 0) {
-			char* arg = strtok(NULL, " ");
-			if (!arg) {
-				puts("\"info\" must be followed by the name of an info command.");
-				puts("List of info subcommands:\n");
-				puts("info registers		-- List of integer registers and their contents");
-			} else if(strcmp(arg, "registers") == 0 || strcmp(arg, "r") == 0) {
-				printf("eax\t0x%08x\t%d\n", reg_l(R_EAX), reg_l(R_EAX));
-				printf("ecx\t0x%08x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
-				printf("edx\t0x%08x\t%d\n", reg_l(R_EDX), reg_l(R_EDX));
-				printf("ebx\t0x%08x\t%d\n", reg_l(R_EBX), reg_l(R_EBX));
-				printf("esp\t0x%08x\t0x%08x\n", reg_l(R_ESP), reg_l(R_ESP));
-				printf("ebp\t0x%08x\t0x%08x\n", reg_l(R_EBP), reg_l(R_EBP));
-				printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
-				printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
-				printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
-			} else {
-				printf("No explicit command for \"%s\", try \"info\" for more details.\n", arg);
-			}
-		}
+
 
 		/* TODO: Add more commands */
+
+		else if(strcmp(p, "si") == 0) {
+			char* sstep = strtok(NULL, " ");
+			if(!sstep) {
+				cmd_si(1);
+			} else {
+				int step = atoi(sstep);
+				cmd_si(step ? step : 1);
+			}
+		}
+		else if(strcmp(p, "info") == 0 || strcmp(p, "i") == 0) { cmd_i_r(strtok(NULL, " ")); }
+		else if(strcmp(p, "x") == 0) { 
+			char* amount = strtok(NULL, " ");
+			char* address = strtok(NULL, " ");
+			cmd_x(amount, address);
+		}
 
 		else { printf("Unknown command '%s'\n", p); }
 	}
