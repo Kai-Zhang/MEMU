@@ -112,6 +112,25 @@ void main_loop() {
 				cmd_si(offset);
 			}
 		}
+		else if(strcmp(p, "info") == 0 || strcmp(p, "i") == 0) {
+			char* arg = strtok(NULL, " ");
+			if (!arg) {
+				puts("\"info\" must be followed by the name of an info command.");
+				puts("List of info subcommands:\n");
+				puts("info registers		-- List of integer registers and their contents");
+			}
+			if(strcmp(arg, "registers") == 0 || strcmp(arg, "r") == 0) {
+				printf("eax\t%8x\t%d", reg_l(R_EAX), reg_l(R_EAX));
+				printf("ecx\t%8x\t%d", reg_l(R_ECX), reg_l(R_ECX));
+				printf("edx\t%8x\t%d", reg_l(R_EDX), reg_l(R_EDX));
+				printf("ebx\t%8x\t%d", reg_l(R_EBX), reg_l(R_EBX));
+				printf("esp\t%8x\t%d", reg_l(R_ESP), reg_l(R_ESP));
+				printf("ebp\t%8x\t%d", reg_l(R_EBP), reg_l(R_EBP));
+				printf("esi\t%8x\t%d", reg_l(R_ESI), reg_l(R_ESI));
+				printf("edi\t%8x\t%d", reg_l(R_EDI), reg_l(R_EDI));
+				printf("eip\t%8x\t%d", cpu.eip, cpu.eip);
+			}
+		}
 
 		/* TODO: Add more commands */
 
