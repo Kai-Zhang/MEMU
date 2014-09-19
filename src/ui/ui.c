@@ -80,6 +80,18 @@ restart_:
 	cmd_c();
 }
 
+static void cmd_si(int step) {
+	if(nemu_state == END) {
+		restart();
+	}
+
+	nemu_state = RUNNING;
+	cpu_exec(step);
+	if(nemu_state != END) {
+		nemu_state = STOP;
+	}
+}
+
 void main_loop() {
 	char *cmd;
 	while(1) {
@@ -91,6 +103,10 @@ void main_loop() {
 		if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "q") == 0) { return; }
+		else if(strcmp(p, "si") == 0) {
+			int offset = atoi(strtok(NULL, " "));
+			cmd_si(offset ? offset : 1);
+		}
 
 		/* TODO: Add more commands */
 
