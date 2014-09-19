@@ -124,11 +124,11 @@ void main_loop() {
 				printf("ecx\t0x%08x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
 				printf("edx\t0x%08x\t%d\n", reg_l(R_EDX), reg_l(R_EDX));
 				printf("ebx\t0x%08x\t%d\n", reg_l(R_EBX), reg_l(R_EBX));
-				printf("esp\t0x%08x\t%d\n", reg_l(R_ESP), reg_l(R_ESP));
-				printf("ebp\t0x%08x\t%d\n", reg_l(R_EBP), reg_l(R_EBP));
+				printf("esp\t0x%08x\t0x%08x\n", reg_l(R_ESP), reg_l(R_ESP));
+				printf("ebp\t0x%08x\t0x%08x\n", reg_l(R_EBP), reg_l(R_EBP));
 				printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
 				printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
-				printf("eip\t0x%08x\t%d\n", cpu.eip, cpu.eip);
+				printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
 			}
 		}
 
