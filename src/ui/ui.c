@@ -118,8 +118,7 @@ void main_loop() {
 				puts("\"info\" must be followed by the name of an info command.");
 				puts("List of info subcommands:\n");
 				puts("info registers		-- List of integer registers and their contents");
-			}
-			if(strcmp(arg, "registers") == 0 || strcmp(arg, "r") == 0) {
+			} else if(strcmp(arg, "registers") == 0 || strcmp(arg, "r") == 0) {
 				printf("eax\t0x%08x\t%d\n", reg_l(R_EAX), reg_l(R_EAX));
 				printf("ecx\t0x%08x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
 				printf("edx\t0x%08x\t%d\n", reg_l(R_EDX), reg_l(R_EDX));
@@ -129,6 +128,8 @@ void main_loop() {
 				printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
 				printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
 				printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
+			} else {
+				printf("No explicit command for %s, try \"info\" for more details.\n", arg);
 			}
 		}
 
