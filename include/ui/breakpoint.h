@@ -14,7 +14,5 @@ typedef struct breakpoint {
 
 } BP;
 
-extern BP* new_bp(void);
-extern void free_bp(BP* bp);
 
 #endif

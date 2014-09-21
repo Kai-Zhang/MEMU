@@ -20,10 +20,41 @@ void init_bp_pool() {
 }
 
 /* TODO: Implement the function of breakpoint */
-BP* new_bp() {
-	return NULL;
+ BP* new_bp() {
+	if(!free_) return NULL;
+	BP* newbp = free_; free_ = free_->next;
+
+	newbp->next = NULL;
+	BP* tail = head;
+	while(!(tail->next)) {
+		tail = tail->next;
+	}
+	tail->next = newbp;
+
+	return newbp;
 }
 
-void free_bp(BP* bp) {
+ void free_bp(BP* bp) {
+	BP* trv = head;
+	if(head != bp) {
+		while(trv->next != bp) {
+			trv = trv->next;
+		}
+		assert(trv->next == bp);
+		trv->next = bp->next;
+	} else {
+		head = head->next;
+	}
+	bp->next = NULL;
 
+	if(!free_) {
+		free_ = bp;
+		return;
+	}
+	trv = free_;
+	while(!(trv->next)) {
+		trv = trv->next;
+	}
+	assert(trv->next == NULL);
+	trv->next = bp;
 }
