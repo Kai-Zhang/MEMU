@@ -20,3 +20,10 @@ void init_bp_pool() {
 }
 
 /* TODO: Implement the function of breakpoint */
+BP* new_bp() {
+	return NULL;
+}
+
+void free_bp(BP* bp) {
+
+}
