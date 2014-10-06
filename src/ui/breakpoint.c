@@ -29,7 +29,7 @@ BP* new_bp() {
 		head = newbp;
 	} else {
 		BP* tail = head;
-		while(!(tail->next)) {
+		while(tail->next) {
 			tail = tail->next;
 		}
 		tail->next = newbp;
