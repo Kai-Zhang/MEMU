@@ -89,6 +89,5 @@ void show_bp() {
 		}
 		trv = trv->next;
 	}
-	putchar('\n');
 }
 

@@ -147,7 +147,7 @@ static void cmd_b(char *expr) {
 		return;
 	}
 	// TODO: Expression Handler
-	swaddr_t bp_addr = strtol(expr + 1, NULL, 0);
+	swaddr_t bp_addr = strtol(expr + 1, NULL, 16);
 	BP* newbp = new_bp();
 	newbp->hit_time = 0;
 	newbp->address = bp_addr;
