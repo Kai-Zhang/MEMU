@@ -55,7 +55,7 @@ void free_bp(BP* bp) {
 		return;
 	}
 	trv = free_;
-	while(!(trv->next)) {
+	while(trv->next) {
 		trv = trv->next;
 	}
 	assert(trv->next == NULL);
