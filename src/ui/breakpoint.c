@@ -25,12 +25,15 @@ BP* new_bp() {
 	BP* newbp = free_; free_ = free_->next;
 
 	newbp->next = NULL;
-	BP* tail = head;
-	while(!(tail->next)) {
-		tail = tail->next;
+	if(!head) {
+		head = newbp;
+	} else {
+		BP* tail = head;
+		while(!(tail->next)) {
+			tail = tail->next;
+		}
+		tail->next = newbp;
 	}
-	tail->next = newbp;
-
 	return newbp;
 }
 
