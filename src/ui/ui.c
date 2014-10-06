@@ -167,7 +167,7 @@ static void cmd_d(char *bp_no) {
 	}
 	BP* freebp = find_bp(no);
 	if(!freebp) {
-		printf("No breakpoint number %d", no);
+		printf("No breakpoint number %d\n", no);
 		return;
 	}
 	free_bp(freebp);
