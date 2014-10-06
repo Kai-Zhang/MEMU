@@ -1,4 +1,5 @@
 #include "ui/ui.h"
+#include "ui/breakpoint.h"
 
 #include "nemu.h"
 
@@ -93,7 +94,7 @@ static void cmd_si(int step) {
 	}
 }
 
-static void cmd_i_r(char* arg) {
+static void cmd_i(char* arg) {
 	if (!arg) {
 		puts("\"info\" must be followed by the name of an info command.");
 		puts("List of info subcommands:\n");
@@ -108,6 +109,8 @@ static void cmd_i_r(char* arg) {
 		printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
 		printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
 		printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
+	} else if(strcmp(arg, "b") == 0) {
+		show_bp();
 	} else {
 		printf("No explicit command for \"%s\", try \"info\" for more details.\n", arg);
 	}
@@ -138,6 +141,37 @@ static void cmd_x(char* amount_str, char* address_str) {
 	}
 }
 
+static void cmd_b(char *expr) {
+	if(!expr) {
+		puts("Argument required (breakpoint address)");
+		return;
+	}
+	// TODO: Expression Handler
+	swaddr_t bp_addr = strtol(expr + 1, NULL, 0);
+	BP* newbp = new_bp();
+	newbp->hit_time = 0;
+	newbp->replaced = swaddr_read(bp_addr, 1);
+	swaddr_write(bp_addr, 1, 0xcc);
+}
+
+static void cmd_d(char *bp_no) {
+	if(!bp_no) {
+		puts("Argument required (breakpoint number)");
+		return;
+	}
+	char *rest_str = NULL;
+	int no = strtol(bp_no, &rest_str, 0);
+	if(strcmp(rest_str, "") == 0) {
+		printf("warning: bad breakpoint number at or near '%s'", bp_no);
+		return;
+	}
+	BP* freebp = find_bp(no);
+	if(!freebp) {
+		printf("No breakpoint number %d", no);
+	}
+	free_bp(freebp);
+}
+
 void main_loop() {
 	char *cmd;
 	while(1) {
@@ -162,12 +196,21 @@ void main_loop() {
 				cmd_si(step ? step : 1);
 			}
 		}
-		else if(strcmp(p, "info") == 0 || strcmp(p, "i") == 0) { cmd_i_r(strtok(NULL, " ")); }
+		else if(strcmp(p, "info") == 0 || strcmp(p, "i") == 0) { cmd_i(strtok(NULL, " ")); }
 		else if(strcmp(p, "x") == 0) { 
 			char* amount = strtok(NULL, " ");
 			char* address = strtok(NULL, " ");
 			cmd_x(amount, address);
 		}
+		else if(strcmp(p, "b") == 0) {
+			char* expr = strtok(NULL, " ");
+			cmd_b(expr);
+		}
+		else if(strcmp(p, "d") == 0) {
+			char* bp_no = strtok(NULL, " ");
+			cmd_d(bp_no);
+		}
+
 
 		else { printf("Unknown command '%s'\n", p); }
 	}

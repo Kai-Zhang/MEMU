@@ -10,9 +10,14 @@ typedef struct breakpoint {
 	struct breakpoint *next;
 
 	/* TODO: Add more members if necessary */
-
+	uint8_t replaced;
+	int hit_time;
 
 } BP;
 
+extern BP* new_bp();
+extern void free_bp(BP*);
+extern BP* find_bp(int);
+extern void show_bp();
 
 #endif

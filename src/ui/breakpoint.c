@@ -20,7 +20,7 @@ void init_bp_pool() {
 }
 
 /* TODO: Implement the function of breakpoint */
- BP* new_bp() {
+BP* new_bp() {
 	if(!free_) return NULL;
 	BP* newbp = free_; free_ = free_->next;
 
@@ -34,7 +34,7 @@ void init_bp_pool() {
 	return newbp;
 }
 
- void free_bp(BP* bp) {
+void free_bp(BP* bp) {
 	BP* trv = head;
 	if(head != bp) {
 		while(trv->next != bp) {
@@ -58,3 +58,28 @@ void init_bp_pool() {
 	assert(trv->next == NULL);
 	trv->next = bp;
 }
+
+BP* find_bp(int no) {
+	BP* trv = head;
+	while(trv) {
+		if(trv->NO == no) {
+			return trv;
+		}
+		trv = trv->next;
+	}
+	return NULL;
+}
+
+void show_bp() {
+	if(!head) {
+		puts("No breakpoints or watchpoints");
+		return;
+	}
+	BP* trv = head;
+	while(trv) {
+		printf("%d ", trv->NO);
+		trv = trv->next;
+	}
+	putchar('\n');
+}
+
