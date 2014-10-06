@@ -161,8 +161,8 @@ static void cmd_d(char *bp_no) {
 	}
 	char *rest_str = NULL;
 	int no = strtol(bp_no, &rest_str, 0);
-	if(strcmp(rest_str, "") == 0) {
-		printf("warning: bad breakpoint number at or near '%s'", bp_no);
+	if(strcmp(rest_str, "")) {
+		printf("warning: bad breakpoint number at or near '%s'\n", bp_no);
 		return;
 	}
 	BP* freebp = find_bp(no);
