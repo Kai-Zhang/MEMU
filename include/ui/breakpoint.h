@@ -11,6 +11,7 @@ typedef struct breakpoint {
 
 	/* TODO: Add more members if necessary */
 	uint8_t replaced;
+	swaddr_t address;
 	int hit_time;
 
 } BP;

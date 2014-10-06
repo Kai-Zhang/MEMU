@@ -150,6 +150,7 @@ static void cmd_b(char *expr) {
 	swaddr_t bp_addr = strtol(expr + 1, NULL, 0);
 	BP* newbp = new_bp();
 	newbp->hit_time = 0;
+	newbp->address = bp_addr;
 	newbp->replaced = swaddr_read(bp_addr, 1);
 	swaddr_write(bp_addr, 1, 0xcc);
 }

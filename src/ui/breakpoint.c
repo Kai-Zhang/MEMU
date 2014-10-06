@@ -78,9 +78,15 @@ void show_bp() {
 		puts("No breakpoints or watchpoints");
 		return;
 	}
+	puts("Num\tType\t\tAddress");
 	BP* trv = head;
 	while(trv) {
-		printf("%d ", trv->NO);
+		printf("%d\tbreakpoint\t0x%x\n", trv->NO, trv->address);
+		if(trv->hit_time == 1) {
+			puts("\tbreakpoint already hit 1 time");
+		} else if(trv->hit_time > 1) {
+			printf("\tbreakpoint already hit %d times", trv->hit_time);
+		}
 		trv = trv->next;
 	}
 	putchar('\n');
