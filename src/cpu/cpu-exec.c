@@ -1,4 +1,5 @@
 #include "ui/ui.h"
+#include "ui/breakpoint.h"
 
 #include "nemu.h"
 
@@ -26,6 +27,8 @@ void restart() {
 	cpu.eip = LOADER_START;
 
 	init_dram();
+
+	recover_bp();
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {

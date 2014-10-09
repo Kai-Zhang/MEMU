@@ -106,3 +106,12 @@ void show_bp() {
 	}
 }
 
+void recover_bp() {
+	BP *trv = head;
+	while(trv) {
+		swaddr_write(trv->address, 1, INT3_CODE);
+		trv->hit_time = 0;
+		trv = trv->next;
+	}
+}
+

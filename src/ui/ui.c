@@ -152,7 +152,7 @@ static void cmd_b(char *expr) {
 	newbp->hit_time = 0;
 	newbp->address = bp_addr;
 	newbp->replaced = swaddr_read(bp_addr, 1);
-	swaddr_write(bp_addr, 1, 0xcc);
+	swaddr_write(bp_addr, 1, INT3_CODE);
 }
 
 static void cmd_d(char *bp_no) {
