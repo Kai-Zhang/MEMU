@@ -50,7 +50,7 @@ void cpu_exec(volatile uint32_t n) {
 
 		cpu.eip += instr_len;
 
-		if(n_temp != -1 || (enable_debug && !quiet)) {
+		if(n_temp != -1 || (enable_debug && !quiet && !hit_bp)) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
 		}
