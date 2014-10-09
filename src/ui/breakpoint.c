@@ -1,4 +1,5 @@
 #include "ui/breakpoint.h"
+#include "common.h"
 
 #include "nemu.h"
 
@@ -6,6 +7,8 @@
 
 static BP bp_pool[NR_BP];
 static BP *head, *free_;
+
+bool hit_bp;
 
 void init_bp_pool() {
 	int i;
@@ -17,6 +20,7 @@ void init_bp_pool() {
 
 	head = NULL;
 	free_ = bp_pool;
+	hit_bp = false;
 }
 
 /* TODO: Implement the function of breakpoint */

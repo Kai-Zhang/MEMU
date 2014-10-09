@@ -16,6 +16,8 @@ typedef struct breakpoint {
 
 } BP;
 
+extern bool hit_bp;
+
 extern BP* new_bp();
 extern void free_bp(BP*);
 extern BP* find_bp(int);

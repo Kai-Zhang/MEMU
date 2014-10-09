@@ -2,6 +2,8 @@
 
 #include "ui/ui.h"
 
+#include "ui/breakpoint.h"
+
 #include "nemu.h"
 
 make_helper(inv) {
@@ -19,6 +21,8 @@ make_helper(inv) {
 make_helper(int3) {
 	/* A breakpoint is hit! Do something here! */
 	assert(0);
+	hit_bp = true;
+	nemu_state = INT;
 
 	return 1;
 }
