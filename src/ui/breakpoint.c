@@ -66,7 +66,7 @@ void free_bp(BP* bp) {
 	trv->next = bp;
 }
 
-BP* find_bp(int no) {
+BP* get_bp(int no) {
 	BP* trv = head;
 	while(trv) {
 		if(trv->NO == no) {
@@ -75,6 +75,17 @@ BP* find_bp(int no) {
 		trv = trv->next;
 	}
 	return NULL;
+}
+
+int find_bp(swaddr_t bp_addr) {
+	BP *trv = head;
+	while(trv) {
+		if(trv->address == bp_addr) {
+			return trv->NO;
+		}
+		trv = trv->next;
+	}
+	return -1;
 }
 
 void show_bp() {

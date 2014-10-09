@@ -166,7 +166,7 @@ static void cmd_d(char *bp_no) {
 		printf("warning: bad breakpoint number at or near '%s'\n", bp_no);
 		return;
 	}
-	BP* freebp = find_bp(no);
+	BP* freebp = get_bp(no);
 	if(!freebp) {
 		printf("No breakpoint number %d\n", no);
 		return;

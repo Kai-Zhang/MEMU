@@ -20,7 +20,8 @@ extern bool hit_bp;
 
 extern BP* new_bp();
 extern void free_bp(BP*);
-extern BP* find_bp(int);
+extern BP* get_bp(int);
+extern int find_bp(swaddr_t);
 extern void show_bp();
 
 #endif
