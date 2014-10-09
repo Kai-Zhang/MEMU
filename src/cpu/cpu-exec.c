@@ -59,6 +59,9 @@ void cpu_exec(volatile uint32_t n) {
 			printf("\n\nUser interrupt\n");
 			return;
 		} 
+		if(nemu_state == BREAK) {
+			return;
+		}
 		else if(nemu_state == END) { return; }
 	}
 }

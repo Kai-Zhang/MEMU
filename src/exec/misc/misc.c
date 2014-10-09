@@ -22,7 +22,7 @@ make_helper(int3) {
 	/* A breakpoint is hit! Do something here! */
 //	assert(0);
 	hit_bp = true;
-	nemu_state = INT;
+	nemu_state = BREAK;
 	printf("nemu: HIT Breakpoint %d at 0x%x\n", find_bp(cpu.eip), cpu.eip);
 
 	return 1;
