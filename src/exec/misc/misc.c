@@ -25,6 +25,8 @@ make_helper(int3) {
 	nemu_state = BREAK;
 	printf("\nnemu: Hit Breakpoint %d at 0x%x\n", find_bp(cpu.eip), cpu.eip);
 
+	++ (get_bp(find_bp(cpu.eip)))->hit_time;
+
 	return 1;
 }
 
