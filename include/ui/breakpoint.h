@@ -23,6 +23,7 @@ extern void free_bp(BP*);
 extern BP* get_bp(int);
 extern int find_bp(swaddr_t);
 extern void show_bp();
-extern void recover_bp();
+extern void refresh_bp();
+extern void instr_recover(swaddr_t);
 
 #endif

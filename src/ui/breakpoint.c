@@ -106,7 +106,7 @@ void show_bp() {
 	}
 }
 
-void recover_bp() {
+void refresh_bp() {
 	BP *trv = head;
 	while(trv) {
 		swaddr_write(trv->address, 1, INT3_CODE);
@@ -115,3 +115,7 @@ void recover_bp() {
 	}
 }
 
+void instr_recover(swaddr_t eip) {
+	BP *recover_bp = get_bp(find_bp(eip));
+	swaddr_write(eip, 1, recover_bp->replaced);
+}

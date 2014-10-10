@@ -28,7 +28,7 @@ void restart() {
 
 	init_dram();
 
-	recover_bp();
+	refresh_bp();
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {
@@ -55,13 +55,15 @@ void cpu_exec(volatile uint32_t n) {
 			puts(assembly);
 		}
 
-		if(nemu_state == INT) {
-			printf("\n\nUser interrupt\n");
-			return;
-		} 
-		if(nemu_state == BREAK) {
-			return;
+		switch(nemu_state) {
+		case INT:	printf("\n\nUser interrupt\n");	return;
+		case BREAK:	instr_recover(--cpu.eip);		return;
+		case END:	return;
+		case RUNNING:
+			if(hit_bp) {
+				swaddr_write(cpu.eip - instr_len, 1, INT3_CODE);
+				hit_bp = false;
+			}
 		}
-		else if(nemu_state == END) { return; }
 	}
 }
