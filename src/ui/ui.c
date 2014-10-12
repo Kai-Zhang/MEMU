@@ -128,7 +128,12 @@ static void cmd_x(char* amount_str, char* address_str) {
 		puts("Syntax error: unrecongized address.");
 		return;
 	}
-	int address = strtol(address_str, NULL, 0);
+	bool valid_addr = true;
+	int address = expr_calc(address_str, &valid_addr);
+	if(!valid_addr) {
+		puts("Invalid address expression");
+		return;
+	}
 
 	int blank_count = address & 0xf;
 	int column = 0;
@@ -148,8 +153,13 @@ static void cmd_b(char *expr) {
 		puts("Argument required (breakpoint address).");
 		return;
 	}
-	// TODO: Expression Handler
-	swaddr_t bp_addr = strtol(expr + 1, NULL, 16);
+
+	bool valid_expr = true;
+	swaddr_t bp_addr = expr_calc(expr+1, &valid_expr);
+	if(!valid_expr || expr[0] != '*') {
+		puts("Invalid expression.");
+		return;
+	}
 	BP* newbp = new_bp();
 	newbp->hit_time = 0;
 	newbp->address = bp_addr;
