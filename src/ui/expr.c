@@ -48,8 +48,8 @@ static struct rule {
 	{"~",		BNOT},				// bit not
 	{"\\(",		'('},				// left parenthese
 	{"\\)",		')'},				// right parenthese
-	{"[[:digit:]]+",	NUM},		// decimal number
 	{"0x[[:digit:]]+",	HEX},		// hexadecimal number
+	{"[[:digit:]]+",	NUM},		// decimal number
 	{"\\$[[:alpha:]]+",	REG}		// register
 };
 
