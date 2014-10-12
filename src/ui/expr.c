@@ -87,12 +87,12 @@ static bool make_token(char *e) {
 				 */
 
 				tokens[nr_token].type = rules[i].token_type;
-				int i = 0;
+				int trv = 0;
 				switch(rules[i].token_type) {
-					case NUM:	while(substr_start[i] >= '0' && substr_start[i] <= '9' && i < 32) {
-									tokens[nr_token].str[i] = substr_start[i]; ++i;
+					case NUM:	while(substr_start[trv] >= '0' && substr_start[trv] <= '9' && trv < 32) {
+									tokens[nr_token].str[trv] = substr_start[trv]; ++trv;
 								}
-								tokens[nr_token].str[i] = 0;	break;
+								tokens[nr_token].str[trv] = 0;	break;
 					//default: assert(0);
 				}
 				++ nr_token;
