@@ -12,6 +12,7 @@ int nemu_state = END;
 
 void cpu_exec(uint32_t);
 void restart();
+uint32_t expr_calc(char *, bool *);
 
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -99,6 +100,7 @@ static void cmd_i(char* arg) {
 		puts("\"info\" must be followed by the name of an info command.");
 		puts("List of info subcommands:\n");
 		puts("info registers		-- List of integer registers and their contents");
+		puts("info breakpoints		-- List of the information of breakpoints");
 	} else if(strcmp(arg, "r") == 0) {
 		printf("eax\t0x%08x\t%d\n", reg_l(R_EAX), reg_l(R_EAX));
 		printf("ecx\t0x%08x\t%d\n", reg_l(R_ECX), reg_l(R_ECX));
@@ -118,7 +120,7 @@ static void cmd_i(char* arg) {
 
 static void cmd_x(char* amount_str, char* address_str) {
 	if(!amount_str) {
-		puts("Argument required (size of memory and starting display address)");
+		puts("Argument required (size of memory and starting display address).");
 		return;
 	}
 	int amount = strtol(amount_str, NULL, 0);
@@ -143,7 +145,7 @@ static void cmd_x(char* amount_str, char* address_str) {
 
 static void cmd_b(char *expr) {
 	if(!expr) {
-		puts("Argument required (breakpoint address)");
+		puts("Argument required (breakpoint address).");
 		return;
 	}
 	// TODO: Expression Handler
@@ -157,7 +159,7 @@ static void cmd_b(char *expr) {
 
 static void cmd_d(char *bp_no) {
 	if(!bp_no) {
-		puts("Argument required (breakpoint number)");
+		puts("Argument required (breakpoint number).");
 		return;
 	}
 	char *rest_str = NULL;
@@ -168,11 +170,26 @@ static void cmd_d(char *bp_no) {
 	}
 	BP* freebp = get_bp(no);
 	if(!freebp) {
-		printf("No breakpoint number %d\n", no);
+		printf("No breakpoint number %d.\n", no);
 		return;
 	}
 	free_bp(freebp);
 }
+
+static void cmd_p(char *expr) {
+	if(!expr) {
+		puts("An expression is expected.");
+		return;
+	}
+	bool success = true;
+	uint32_t rst = expr_calc(expr, &success);
+	if(!success) {
+		puts("A syntax error in expression.");
+		return;
+	}
+	printf("Result = %d\n", rst);
+}
+
 
 void main_loop() {
 	char *cmd;
@@ -214,7 +231,7 @@ void main_loop() {
 		}
 		else if(strcmp(p, "p") == 0) {
 			char *expr = strtok(NULL, "\0");
-			printf("%s\n", expr);
+			cmd_p(expr);
 		}
 
 
