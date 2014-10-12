@@ -218,9 +218,9 @@ uint32_t eval(int start, int end, bool *success) {
 			case NUM:	return (uint32_t)strtol(tokens[start].str, NULL, 10);
 			case HEX:	return (uint32_t)strtol(tokens[start].str, NULL, 16);
 			case REG:	for(i = R_EAX; i <= R_EDI; ++i)
-							if(strcasecmp(regsl[i], tokens[start].str+1) == 0)
+							if(strcasecmp(regsl[i], tokens[start].str) == 0)
 								return reg_l(i);
-						if(strcasecmp("$eip", tokens[start].str) == 0)
+						if(strcasecmp("eip", tokens[start].str) == 0)
 							return cpu.eip;
 						*success = false;	return 0;
 			default:	*success = false;	return 0;
