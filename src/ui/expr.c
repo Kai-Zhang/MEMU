@@ -87,7 +87,12 @@ static bool make_token(char *e) {
 				 */
 
 				tokens[nr_token].type = rules[i].token_type;
+				int i = 0;
 				switch(rules[i].token_type) {
+					case NUM:	while(e[position + i] >= '0' && e[position + i] <= '9' && i < 32) {
+									tokens[nr_token].str[i] = e[position + i]; ++i;
+								}
+								tokens[nr_token].str[i] = 0;	break;
 					default: assert(0);
 				}
 				++ nr_token;
@@ -136,17 +141,38 @@ bool check_parenthese(int start, int end) {
 	return !pair_check;
 }
 
+int dominant_operator(int start, int end) {
+	return 0;
+}
+
 uint32_t eval(int start, int end, bool *success) {
 	if(start > end) {
 		*success = false;
 		return 0;
 	} else if(start == end) {
+		*success = true;
 		return (uint32_t)strtol(tokens[start].str, NULL, 0);
 	} else if(check_parenthese(start, end)) {
-//		return eval(start + 1, end - 1);
+		return eval(start + 1, end - 1, success);
 	} else {
+		int op_pos = dominant_operator(start, end);
+		if(op_pos == -1) {
+			*success = false;
+			return 0;
+		}
+		uint32_t lhs = eval(start, op_pos - 1, success);
+		if(!(*success)) return 0;
+		uint32_t rhs = eval(op_pos + 1, end, success);
+		if(!(*success)) return 0;
 
+		switch(tokens[op_pos].type) {
+			case '+':	return lhs + rhs;
+			case '-':	return lhs - rhs;
+			case '*':	return lhs * rhs;
+			case '/':	return lhs / rhs;
+			default:	assert(0);
+		}
 	}
-	return 0;
+	//return 0;
 }
 
