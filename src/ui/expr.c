@@ -1,5 +1,6 @@
 #include "common.h"
 #include "memory.h"
+#include "cpu/reg.h"
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -9,7 +10,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, NUM, REG, LE, GE, EQ, NEQ, AND, OR, NOT, SHL, SHR,
+	NOTYPE = 256, NUM, HEX, REG, LE, GE, EQ, NEQ, AND, OR, NOT, SHL, SHR,
 	BAND, BOR, XOR, BNOT, DEREF, NEG, POS
 	/* TODO: Add more token types */
 
@@ -47,8 +48,8 @@ static struct rule {
 	{"~",		BNOT},				// bit not
 	{"\\(",		'('},				// left parenthese
 	{"\\)",		')'},				// right parenthese
-	{"[[:digit:]]+",	NUM},		// number
-	{"0x[[:digit:]]+",	NUM},		// hexadecimal number
+	{"[[:digit:]]+",	NUM},		// decimal number
+	{"0x[[:digit:]]+",	HEX},		// hexadecimal number
 	{"\\$[[:alpha:]]+",	REG}		// register
 };
 
@@ -206,7 +207,16 @@ uint32_t eval(int start, int end, bool *success) {
 		return 0;
 	} else if(start == end) {
 		*success = true;
-		return (uint32_t)strtol(tokens[start].str, NULL, 0);
+		int i = 0;
+		switch(tokens[start].type) {
+			case NUM:	return (uint32_t)strtol(tokens[start].str, NULL, 10);
+			case HEX:	return (uint32_t)strtol(tokens[start].str, NULL, 16);
+			case REG:	for(i = R_EAX; i <= R_EDI; ++i)
+							if(strcasecmp(regsl[i], tokens[start].str+1) == 0)
+								return reg_l(i);
+						*success = false;	return 0;
+			default:	*success = false;	return 0;
+		}
 	} else if(check_parenthese(start, end)) {
 		return eval(start + 1, end - 1, success);
 	} else {
@@ -261,12 +271,11 @@ uint32_t expr_calc(char *e, bool *success) {
 
 	int i = 0;
 	for (; i < nr_token-1; ++i) {
-		if(tokens[i].type != ')' && tokens[i].type != NUM) {
+		if(tokens[i].type != ')' && tokens[i].type != NUM && tokens[i].type != HEX) {
 			switch(tokens[i+1].type) {
 				case '*':	tokens[i+1].type = DEREF;	break;
 				case '+':	tokens[i+1].type = POS;		break;
 				case '-':	tokens[i+1].type = NEG;		break;
-				default:	*success = false;			return 0;
 			}
 		}
 	}
