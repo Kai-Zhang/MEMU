@@ -118,15 +118,15 @@ bool check_parenthese(int start, int end) {
 	}
 	
 	int pair_check = 0;
-	int checker = start;
-	for (; checker <= end; ++checker) {
+	int checker = start + 1;
+	for (; checker < end; ++checker) {
 		if(tokens[checker].type == '(') {
 			++ pair_check;
 		} else if (tokens[checker].type == ')') {
 			-- pair_check;
 		}
 
-		if(!pair_check) {
+		if(pair_check <= 0) {
 			return false;
 		}
 	}
