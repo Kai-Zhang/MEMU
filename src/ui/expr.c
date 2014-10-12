@@ -89,8 +89,8 @@ static bool make_token(char *e) {
 				tokens[nr_token].type = rules[i].token_type;
 				int i = 0;
 				switch(rules[i].token_type) {
-					case NUM:	while(e[position + i] >= '0' && e[position + i] <= '9' && i < 32) {
-									tokens[nr_token].str[i] = e[position + i]; ++i;
+					case NUM:	while(substr_start[i] >= '0' && substr_start[i] <= '9' && i < 32) {
+									tokens[nr_token].str[i] = substr_start[i]; ++i;
 								}
 								tokens[nr_token].str[i] = 0;	break;
 					//default: assert(0);
@@ -108,16 +108,6 @@ static bool make_token(char *e) {
 	}
 
 	return true; 
-}
-
-uint32_t expr_calc(char *e, bool *success) {
-	if(!make_token(e)) {
-		*success = false;
-		return 0;
-	}
-
-	/* TODO: Implement code to evaluate the expression. */
-	return 0;
 }
 
 bool check_parenthese(int start, int end) {
@@ -193,5 +183,15 @@ uint32_t eval(int start, int end, bool *success) {
 			default:	assert(0);
 		}
 	}
+}
+
+uint32_t expr_calc(char *e, bool *success) {
+	if(!make_token(e)) {
+		*success = false;
+		return 0;
+	}
+
+	/* TODO: Implement code to evaluate the expression. */
+	return eval(0, nr_token-1, success);
 }
 
