@@ -26,7 +26,7 @@ static struct rule {
 	{" +",		NOTYPE},			// white space
 	{"\\+",		'+'},				// plus
 	{"==",		EQ},				// equal
-	{"\\[[:digit:]]+",	NUM},		// number
+	{"[[:digit:]]+",	NUM},		// number
 	{"-",		'*'},				// minus
 	{"\\*",		'-'},				// multiply
 	{"\\/",		'/'},				// divide
