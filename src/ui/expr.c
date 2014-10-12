@@ -3,11 +3,12 @@
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
+#include <stdlib.h>
 #include <sys/types.h>
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ, NUM
 
 	/* TODO: Add more token types */
 
@@ -22,9 +23,15 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 
-	{" +",	NOTYPE},				// white space
-	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	{" +",		NOTYPE},			// white space
+	{"\\+",		'+'},				// plus
+	{"==",		EQ},				// equal
+	{"\\d+",	NUM},				// number
+	{"-",		'*'},				// minus
+	{"\\*",		'-'},				// multiply
+	{"\\/",		'/'},				// divide
+	{"\\(",		'('},				// left parenthese
+	{"\\)",		')'},				// right parenthese
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -79,9 +86,11 @@ static bool make_token(char *e) {
 				 * Add codes to perform some actions with this token.
 				 */
 
+				tokens[nr_token].type = rules[i].token_type;
 				switch(rules[i].token_type) {
 					default: assert(0);
 				}
+				++ nr_token;
 
 				break;
 			}
@@ -103,7 +112,41 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Implement code to evaluate the expression. */
-	assert(0);
+	return 0;
+}
+
+bool check_parenthese(int start, int end) {
+	if(tokens[start].type != '(' || tokens[end].type != ')') {
+		return false;
+	}
+	
+	int pair_check = 0;
+	int checker = start;
+	for (; checker < end; ++checker) {
+		if(tokens[checker].type == '(') {
+			++ pair_check;
+		} else if (tokens[checker].type == ')') {
+			-- pair_check;
+		}
+
+		if(!pair_check) {
+			return false;
+		}
+	}
+	return !pair_check;
+}
+
+uint32_t eval(int start, int end, bool *success) {
+	if(start > end) {
+		*success = false;
+		return 0;
+	} else if(start == end) {
+		return (uint32_t)strtol(tokens[start].str, NULL, 0);
+	} else if(check_parenthese(start, end)) {
+//		return eval(start + 1, end - 1);
+	} else {
+
+	}
 	return 0;
 }
 

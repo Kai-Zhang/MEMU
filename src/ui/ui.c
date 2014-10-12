@@ -212,6 +212,10 @@ void main_loop() {
 			char* bp_no = strtok(NULL, " ");
 			cmd_d(bp_no);
 		}
+		else if(strcmp(p, "p") == 0) {
+			char *expr = strtok(NULL, " ");
+			printf("%s\n", expr);
+		}
 
 
 		else { printf("Unknown command '%s'\n", p); }
