@@ -213,7 +213,7 @@ void main_loop() {
 			cmd_d(bp_no);
 		}
 		else if(strcmp(p, "p") == 0) {
-			char *expr = strtok(NULL, " ");
+			char *expr = strtok(NULL, "\0");
 			printf("%s\n", expr);
 		}
 
