@@ -93,7 +93,7 @@ static bool make_token(char *e) {
 									tokens[nr_token].str[i] = e[position + i]; ++i;
 								}
 								tokens[nr_token].str[i] = 0;	break;
-					default: assert(0);
+					//default: assert(0);
 				}
 				++ nr_token;
 
