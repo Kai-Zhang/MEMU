@@ -1,4 +1,5 @@
 #include "common.h"
+#include "memory.h"
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -8,8 +9,8 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM
-
+	NOTYPE = 256, NUM, REG, LE, GE, EQ, NEQ, AND, OR, NOT, SHL, SHR,
+	BAND, BOR, XOR, BNOT, DEREF, NEG, POS
 	/* TODO: Add more token types */
 
 };
@@ -25,13 +26,30 @@ static struct rule {
 
 	{" +",		NOTYPE},			// white space
 	{"\\+",		'+'},				// plus
-	{"==",		EQ},				// equal
-	{"[[:digit:]]+",	NUM},		// number
 	{"-",		'-'},				// minus
 	{"\\*",		'*'},				// multiply
 	{"\\/",		'/'},				// divide
+	{"\\%",		'%'},				// mod
+	{"<[^<]",	'<'},				// less than
+	{">[^>]",	'>'},				// greater than
+	{"<=",		LE},				// less or equal than
+	{">=",		GE},				// greater or equal than
+	{"==",		EQ},				// equal
+	{"!=",		NEQ},				// not equal
+	{"&&",		AND},				// logical and
+	{"\\|\\|",	OR},				// logical or
+	{"![^=]",	NOT},				// logical not
+	{"<<",		SHL},				// shift left
+	{">>",		SHR},				// shift right
+	{"&[^&]",	BAND},				// bit and
+	{"\\|[^\\|]",		BOR},		// bit or
+	{"\\^",		XOR},				// exclusive or
+	{"~",		BNOT},				// bit not
 	{"\\(",		'('},				// left parenthese
 	{"\\)",		')'},				// right parenthese
+	{"[[:digit:]]+",	NUM},		// number
+	{"0x[[:digit:]]+",	NUM},		// hexadecimal number
+	{"\\$[[:alpha:]]+",	REG}		// register
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -94,6 +112,11 @@ static bool make_token(char *e) {
 									tokens[nr_token].str[trv] = substr_start[trv]; ++trv;
 								}
 								tokens[nr_token].str[trv] = 0;	break;
+					case REG:	while(((substr_start[trv] >= 'a' && substr_start[trv] <= 'z') ||
+										(substr_start[trv] >= 'A' && substr_start[trv] <= 'Z')) && trv < 32) {
+									tokens[nr_token].str[trv] = substr_start[trv]; ++trv;
+								}
+								tokens[nr_token].str[trv] = 0;	break;
 					//default: assert(0);
 				}
 				tokens[nr_token].type = rules[i].token_type;
@@ -143,6 +166,25 @@ int dominant_operator(int start, int end) {
 			case '-':	weigh_temp = (pair_check > 0) ? -1 : 3;	break;
 			case '*':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
 			case '/':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
+			case '%':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
+			case '<':	weigh_temp = (pair_check > 0) ? -1 : 5;	break;
+			case '>':	weigh_temp = (pair_check > 0) ? -1 : 5;	break;
+			case LE:	weigh_temp = (pair_check > 0) ? -1 : 5;	break;
+			case GE:	weigh_temp = (pair_check > 0) ? -1 : 5;	break;
+			case EQ:	weigh_temp = (pair_check > 0) ? -1 : 6;	break;
+			case NEQ:	weigh_temp = (pair_check > 0) ? -1 : 6;	break;
+			case AND:	weigh_temp = (pair_check > 0) ? -1 : 10;break;
+			case OR:	weigh_temp = (pair_check > 0) ? -1 : 11;break;
+			case NOT:	weigh_temp = (pair_check > 0) ? -1 : 1;	break;
+			case SHL:	weigh_temp = (pair_check > 0) ? -1 : 4;	break;
+			case SHR:	weigh_temp = (pair_check > 0) ? -1 : 4;	break;
+			case BAND:	weigh_temp = (pair_check > 0) ? -1 : 7;	break;
+			case BOR:	weigh_temp = (pair_check > 0) ? -1 : 9;	break;
+			case XOR:	weigh_temp = (pair_check > 0) ? -1 : 8;	break;
+			case BNOT:	weigh_temp = (pair_check > 0) ? -1 : 1;	break;
+			case DEREF:	weigh_temp = (pair_check > 0) ? -1 : 1;	break;
+			case POS:	weigh_temp = (pair_check > 0) ? -1 : 1;	break;
+			case NEG:	weigh_temp = (pair_check > 0) ? -1 : 1;	break;
 			case '(':	weigh_temp = -1;	++ pair_check;		break;
 			case ')':	weigh_temp = -1;	-- pair_check;		break;
 			default:	weigh_temp = -1;
@@ -173,9 +215,16 @@ uint32_t eval(int start, int end, bool *success) {
 			*success = false;
 			return 0;
 		}
-		uint32_t lhs = eval(start, op_pos - 1, success);
-		if(!(*success)) return 0;
 		uint32_t rhs = eval(op_pos + 1, end, success);
+		if(!(*success)) return 0;
+		switch(tokens[op_pos].type) {
+			case POS:	return rhs;
+			case NEG:	return -rhs;
+			case NOT:	return !rhs;
+			case BNOT:	return ~rhs;
+			case DEREF:	return swaddr_read(rhs, 4);
+		}
+		uint32_t lhs = eval(start, op_pos - 1, success);
 		if(!(*success)) return 0;
 
 		switch(tokens[op_pos].type) {
@@ -183,6 +232,20 @@ uint32_t eval(int start, int end, bool *success) {
 			case '-':	return lhs - rhs;
 			case '*':	return lhs * rhs;
 			case '/':	return lhs / rhs;
+			case '%':	return lhs % rhs;
+			case '<':	return lhs < rhs;
+			case '>':	return lhs > rhs;
+			case LE:	return lhs <= rhs;
+			case GE:	return lhs >= rhs;
+			case EQ:	return lhs == rhs;
+			case NEQ:	return lhs != rhs;
+			case AND:	return lhs && rhs;
+			case OR:	return lhs || rhs;
+			case SHL:	return lhs << rhs;
+			case SHR:	return lhs >> rhs;
+			case BAND:	return lhs & rhs;
+			case BOR:	return lhs | rhs;
+			case XOR:	return lhs ^ rhs;
 			default:	assert(0);
 		}
 	}
@@ -195,6 +258,18 @@ uint32_t expr_calc(char *e, bool *success) {
 	}
 
 	/* TODO: Implement code to evaluate the expression. */
+
+	int i = 0;
+	for (; i < nr_token-1; ++i) {
+		if(tokens[i].type != ')' && tokens[i].type != NUM) {
+			switch(tokens[i+1].type) {
+				case '*':	tokens[i+1].type = DEREF;	break;
+				case '+':	tokens[i+1].type = POS;		break;
+				case '-':	tokens[i+1].type = NEG;		break;
+				default:	*success = false;			return 0;
+			}
+		}
+	}
 	return eval(0, nr_token-1, success);
 }
 
