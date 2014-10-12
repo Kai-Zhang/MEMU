@@ -113,9 +113,15 @@ static bool make_token(char *e) {
 									tokens[nr_token].str[trv] = substr_start[trv]; ++trv;
 								}
 								tokens[nr_token].str[trv] = 0;	break;
+					case HEX:	while(((substr_start[trv] >= '0' && substr_start[trv] <= '9') || 
+										(substr_start[trv] >= 'a' && substr_start[trv] <= 'f') ||
+										(substr_start[trv] >= 'A' && substr_start[trv] <= 'F')) && trv < 32) {
+									tokens[nr_token].str[trv] = substr_start[trv+2]; ++trv;
+								}
+								tokens[nr_token].str[trv] = 0;	break;
 					case REG:	while(((substr_start[trv] >= 'a' && substr_start[trv] <= 'z') ||
 										(substr_start[trv] >= 'A' && substr_start[trv] <= 'Z')) && trv < 32) {
-									tokens[nr_token].str[trv] = substr_start[trv]; ++trv;
+									tokens[nr_token].str[trv] = substr_start[trv+1]; ++trv;
 								}
 								tokens[nr_token].str[trv] = 0;	break;
 					//default: assert(0);
