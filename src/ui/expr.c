@@ -27,8 +27,8 @@ static struct rule {
 	{"\\+",		'+'},				// plus
 	{"==",		EQ},				// equal
 	{"[[:digit:]]+",	NUM},		// number
-	{"-",		'*'},				// minus
-	{"\\*",		'-'},				// multiply
+	{"-",		'-'},				// minus
+	{"\\*",		'*'},				// multiply
 	{"\\/",		'/'},				// divide
 	{"\\(",		'('},				// left parenthese
 	{"\\)",		')'},				// right parenthese
