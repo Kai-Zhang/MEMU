@@ -134,7 +134,7 @@ bool check_parenthese(int start, int end) {
 }
 
 int dominant_operator(int start, int end) {
-	int op_pos = -1, weigh = -1, weigh_temp = 0;
+	int op_pos = -1, weigh = -1, weigh_temp = -1;
 	int pair_check = 0;
 	int trv = start;
 	for( ; trv <= end; ++trv) {
