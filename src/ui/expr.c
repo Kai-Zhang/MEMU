@@ -86,7 +86,8 @@ static bool make_token(char *e) {
 				 * Add codes to perform some actions with this token.
 				 */
 
-				tokens[nr_token].type = rules[i].token_type;
+				if(rules[i].token_type == NOTYPE) break;
+
 				int trv = 0;
 				switch(rules[i].token_type) {
 					case NUM:	while(substr_start[trv] >= '0' && substr_start[trv] <= '9' && trv < 32) {
@@ -95,6 +96,7 @@ static bool make_token(char *e) {
 								tokens[nr_token].str[trv] = 0;	break;
 					//default: assert(0);
 				}
+				tokens[nr_token].type = rules[i].token_type;
 				++ nr_token;
 
 				break;
