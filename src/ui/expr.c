@@ -127,7 +127,7 @@ bool check_parenthese(int start, int end) {
 	
 	int pair_check = 0;
 	int checker = start;
-	for (; checker < end; ++checker) {
+	for (; checker <= end; ++checker) {
 		if(tokens[checker].type == '(') {
 			++ pair_check;
 		} else if (tokens[checker].type == ')') {
@@ -142,7 +142,27 @@ bool check_parenthese(int start, int end) {
 }
 
 int dominant_operator(int start, int end) {
-	return 0;
+	int op_pos = -1, weigh = -1, weigh_temp = 0;
+	int pair_check = 0;
+	int trv = start;
+	for( ; trv <= end; ++trv) {
+		switch(tokens[trv].type) {
+			case '+':	weigh_temp = (pair_check > 0) ? -1 : 3;	break;
+			case '-':	weigh_temp = (pair_check > 0) ? -1 : 3;	break;
+			case '*':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
+			case '/':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
+			case '(':	++ pair_check;							break;
+			case ')':	-- pair_check;							break;
+		}
+
+		if(pair_check < 0)	return -1;
+		if(weigh_temp > weigh) {
+			weigh = weigh_temp;
+			op_pos = trv;
+		}
+	}
+	
+	return op_pos;
 }
 
 uint32_t eval(int start, int end, bool *success) {
@@ -173,6 +193,5 @@ uint32_t eval(int start, int end, bool *success) {
 			default:	assert(0);
 		}
 	}
-	//return 0;
 }
 
