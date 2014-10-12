@@ -143,8 +143,9 @@ int dominant_operator(int start, int end) {
 			case '-':	weigh_temp = (pair_check > 0) ? -1 : 3;	break;
 			case '*':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
 			case '/':	weigh_temp = (pair_check > 0) ? -1 : 2;	break;
-			case '(':	++ pair_check;							break;
-			case ')':	-- pair_check;							break;
+			case '(':	weigh_temp = -1;	++ pair_check;		break;
+			case ')':	weigh_temp = -1;	-- pair_check;		break;
+			default:	weigh_temp = -1;
 		}
 
 		if(pair_check < 0)	return -1;
