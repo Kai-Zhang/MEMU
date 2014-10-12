@@ -117,7 +117,7 @@ bool check_parenthese(int start, int end) {
 		return false;
 	}
 	
-	int pair_check = 0;
+	int pair_check = 1;
 	int checker = start + 1;
 	for (; checker < end; ++checker) {
 		if(tokens[checker].type == '(') {
@@ -130,7 +130,7 @@ bool check_parenthese(int start, int end) {
 			return false;
 		}
 	}
-	return !pair_check;
+	return pair_check == 1;
 }
 
 int dominant_operator(int start, int end) {
