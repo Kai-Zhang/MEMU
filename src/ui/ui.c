@@ -5,6 +5,7 @@
 
 #include <signal.h>
 #include <stdlib.h>
+#include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -214,11 +215,14 @@ static void cmd_w(char *expr) {
 		return;
 	}
 
+	char *watch = (char *)malloc(strlen(expr) + 1);
+	strcpy(watch, expr);
+
 	BP* newbp = new_bp();
 	newbp->watch = true;
 	newbp->hit_time = 0;
 	newbp->pre_rst = rst;
-	newbp->watch_expr = expr;
+	newbp->watch_expr = watch;
 }
 
 void main_loop() {
