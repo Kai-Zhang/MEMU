@@ -137,7 +137,7 @@ void check_watchpoint() {
 	while(trv) {
 		if(trv->watch) {
 			if((rst = expr_calc(trv->watch_expr, NULL)) != trv->pre_rst) {
-				printf("HIT watchpoint %d:%s\n\nOld value = %d\nNew value = %d\n",
+				printf("nemu: HIT watchpoint %d:%s\n\nOld value = %d\nNew value = %d\n",
 						trv->NO, trv->watch_expr, trv->pre_rst, rst);
 				trv->pre_rst = rst;
 				++ trv->hit_time;
