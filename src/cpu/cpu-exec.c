@@ -55,7 +55,7 @@ void cpu_exec(volatile uint32_t n) {
 			puts(assembly);
 		}
 
-		if(check_watchpoint()) {
+		if(check_watchpoint() && nemu_state != BREAK) {
 			return;
 		}
 
