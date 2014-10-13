@@ -127,9 +127,8 @@ void refresh_bp() {
 
 void instr_recover(swaddr_t eip) {
 	BP *recover_bp = get_bp(find_bp(eip));
-	if(recover_bp != NULL) {
-		swaddr_write(eip, 1, recover_bp->replaced);
-	}
+	assert(recover_bp != NULL);
+	swaddr_write(eip, 1, recover_bp->replaced);
 }
 
 void check_watchpoint() {
