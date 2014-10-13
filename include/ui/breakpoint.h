@@ -36,6 +36,6 @@ extern int find_bp(swaddr_t);
 extern void show_bp();
 extern void refresh_bp();
 extern void instr_recover(swaddr_t);
-extern void check_watchpoint();
+extern bool check_watchpoint();
 
 #endif

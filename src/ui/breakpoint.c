@@ -1,5 +1,4 @@
 #include "ui/breakpoint.h"
-#include "ui/ui.h"
 #include "common.h"
 
 #include "nemu.h"
@@ -131,9 +130,10 @@ void instr_recover(swaddr_t eip) {
 	swaddr_write(eip, 1, recover_bp->replaced);
 }
 
-void check_watchpoint() {
+bool check_watchpoint() {
 	BP *trv = head;
 	uint32_t rst = 0;
+	bool hit_wp = false;
 	while(trv) {
 		if(trv->watch) {
 			if((rst = expr_calc(trv->watch_expr, NULL)) != trv->pre_rst) {
@@ -141,9 +141,10 @@ void check_watchpoint() {
 						trv->NO, trv->watch_expr, trv->pre_rst, rst);
 				trv->pre_rst = rst;
 				++ trv->hit_time;
-				nemu_state = BREAK;
+				hit_wp = true;
 			}
 		}
 		trv = trv->next;
 	}
+	return hit_wp;
 }
