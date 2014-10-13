@@ -60,8 +60,8 @@ void cpu_exec(volatile uint32_t n) {
 		}
 
 		switch(nemu_state) {
-		case INT:	printf("\n\nUser interrupt\n");				return;
-		case BREAK:	if(hit_bp)	instr_recover(--cpu.eip);		return;
+		case INT:	printf("\n\nUser interrupt\n");	return;
+		case BREAK:	instr_recover(--cpu.eip);		return;
 		case END:	return;
 		case RUNNING:
 			if(hit_bp) {
