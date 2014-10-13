@@ -270,6 +270,10 @@ uint32_t eval(int start, int end, bool *success) {
 }
 
 uint32_t expr_calc(char *e, bool *success) {
+	if(!success) {
+		bool temp = true;
+		success = &temp;
+	}
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
