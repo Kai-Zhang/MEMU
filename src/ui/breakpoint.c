@@ -101,14 +101,14 @@ void show_bp() {
 	BP* trv = head;
 	while(trv) {
 		if(trv->watch) {
-			printf("%d\twatchpoint\t\t\t\t%s\n", trv->NO, trv->watch_expr);
+			printf("%d\twatchpoint\t\t\t%s\n", trv->NO, trv->watch_expr);
 		} else {
 			printf("%d\tbreakpoint\t0x%08x\t\n", trv->NO, trv->address);
 		}
 		if(trv->hit_time == 1) {
 			puts("\tbreakpoint already hit 1 time");
 		} else if(trv->hit_time > 1) {
-			printf("\tbreakpoint already hit %d times", trv->hit_time);
+			printf("\tbreakpoint already hit %d times\n", trv->hit_time);
 		}
 		trv = trv->next;
 	}
