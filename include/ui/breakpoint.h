@@ -8,10 +8,21 @@
 typedef struct breakpoint {
 	int NO;
 	struct breakpoint *next;
+	bool watch;
 
 	/* TODO: Add more members if necessary */
-	uint8_t replaced;
-	swaddr_t address;
+	union {
+		struct {
+			uint8_t replaced;
+			swaddr_t address;
+		};
+
+		struct {
+			char *watch_expr;
+			uint32_t pre_rst;
+		};
+	};
+
 	int hit_time;
 
 } BP;
@@ -25,5 +36,6 @@ extern int find_bp(swaddr_t);
 extern void show_bp();
 extern void refresh_bp();
 extern void instr_recover(swaddr_t);
+extern void check_watchpoint();
 
 #endif

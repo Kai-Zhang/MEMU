@@ -161,6 +161,7 @@ static void cmd_b(char *expr) {
 		return;
 	}
 	BP* newbp = new_bp();
+	newbp->watch = false;
 	newbp->hit_time = 0;
 	newbp->address = bp_addr;
 	newbp->replaced = swaddr_read(bp_addr, 1);
@@ -200,6 +201,25 @@ static void cmd_p(char *expr) {
 	printf("Result = %d\n", rst);
 }
 
+static void cmd_w(char *expr) {
+	if(!expr) {
+		puts("Argument required (expression to compute).");
+		return;
+	}
+
+	bool success = true;
+	uint32_t rst = expr_calc(expr, &success);
+	if(!success) {
+		puts("Invalid expression.");
+		return;
+	}
+
+	BP* newbp = new_bp();
+	newbp->watch = true;
+	newbp->hit_time = 0;
+	newbp->pre_rst = rst;
+	newbp->watch_expr = expr;
+}
 
 void main_loop() {
 	char *cmd;
@@ -228,11 +248,11 @@ void main_loop() {
 		else if(strcmp(p, "info") == 0 || strcmp(p, "i") == 0) { cmd_i(strtok(NULL, " ")); }
 		else if(strcmp(p, "x") == 0) { 
 			char* amount = strtok(NULL, " ");
-			char* address = strtok(NULL, " ");
+			char* address = strtok(NULL, "\0");
 			cmd_x(amount, address);
 		}
 		else if(strcmp(p, "b") == 0) {
-			char* expr = strtok(NULL, " ");
+			char* expr = strtok(NULL, "\0");
 			cmd_b(expr);
 		}
 		else if(strcmp(p, "d") == 0) {
@@ -242,6 +262,10 @@ void main_loop() {
 		else if(strcmp(p, "p") == 0) {
 			char *expr = strtok(NULL, "\0");
 			cmd_p(expr);
+		}
+		else if(strcmp(p, "w") == 0) {
+			char *expr = strtok(NULL, "\0");
+			cmd_w(expr);
 		}
 
 

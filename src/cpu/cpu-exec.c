@@ -55,6 +55,8 @@ void cpu_exec(volatile uint32_t n) {
 			puts(assembly);
 		}
 
+		check_watchpoint();
+
 		switch(nemu_state) {
 		case INT:	printf("\n\nUser interrupt\n");	return;
 		case BREAK:	instr_recover(--cpu.eip);		return;

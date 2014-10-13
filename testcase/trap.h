@@ -15,7 +15,7 @@
 #define nemu_assert(cond) \
 	do { \
 		if( !(cond) ) HIT_BAD_TRAP; \
-	} while(0);
+	} while(0)
 
 #else
 

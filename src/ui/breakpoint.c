@@ -1,9 +1,12 @@
 #include "ui/breakpoint.h"
+#include "ui/ui.h"
 #include "common.h"
 
 #include "nemu.h"
 
 #define NR_BP 32
+
+extern uint32_t expr_calc(char *, bool *);
 
 static BP bp_pool[NR_BP];
 static BP *head, *free_;
@@ -16,6 +19,7 @@ void init_bp_pool() {
 		bp_pool[i].NO = i;
 		bp_pool[i].next = &bp_pool[i + 1];
 	}
+	bp_pool[i].NO = i;
 	bp_pool[i].next = NULL;
 
 	head = NULL;
@@ -80,7 +84,7 @@ BP* get_bp(int no) {
 int find_bp(swaddr_t bp_addr) {
 	BP *trv = head;
 	while(trv) {
-		if(trv->address == bp_addr) {
+		if(!(trv->watch) && trv->address == bp_addr) {
 			return trv->NO;
 		}
 		trv = trv->next;
@@ -93,10 +97,14 @@ void show_bp() {
 		puts("No breakpoints or watchpoints");
 		return;
 	}
-	puts("Num\tType\t\tAddress");
+	puts("Num\tType\t\tAddress\t\tWhat");
 	BP* trv = head;
 	while(trv) {
-		printf("%d\tbreakpoint\t0x%x\n", trv->NO, trv->address);
+		if(trv->watch) {
+			printf("%d\twatchpoint\t\t\t\t%s\n", trv->NO, trv->watch_expr);
+		} else {
+			printf("%d\tbreakpoint\t0x%08x\t\n", trv->NO, trv->address);
+		}
 		if(trv->hit_time == 1) {
 			puts("\tbreakpoint already hit 1 time");
 		} else if(trv->hit_time > 1) {
@@ -109,7 +117,9 @@ void show_bp() {
 void refresh_bp() {
 	BP *trv = head;
 	while(trv) {
-		swaddr_write(trv->address, 1, INT3_CODE);
+		if(!(trv->watch)) {
+			swaddr_write(trv->address, 1, INT3_CODE);
+		}
 		trv->hit_time = 0;
 		trv = trv->next;
 	}
@@ -119,4 +129,20 @@ void instr_recover(swaddr_t eip) {
 	BP *recover_bp = get_bp(find_bp(eip));
 	assert(recover_bp != NULL);
 	swaddr_write(eip, 1, recover_bp->replaced);
+}
+
+void check_watchpoint() {
+	BP *trv = head;
+	uint32_t rst = 0;
+	while(trv) {
+		if(trv->watch) {
+			if((rst = expr_calc(trv->watch_expr, NULL)) != trv->pre_rst) {
+				printf("HIT watchpoint %d:%s\n\nOld value = %d\nNew value = %d\n",
+						trv->NO, trv->watch_expr, trv->pre_rst, rst);
+				trv->pre_rst = rst;
+				++ trv->hit_time;
+				nemu_state = BREAK;
+			}
+		}
+	}
 }
