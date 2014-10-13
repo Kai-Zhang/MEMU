@@ -144,5 +144,6 @@ void check_watchpoint() {
 				nemu_state = BREAK;
 			}
 		}
+		trv = trv->next;
 	}
 }
