@@ -6,6 +6,8 @@
 
 #include "nemu.h"
 
+int exec(swaddr_t);
+
 make_helper(inv) {
 	/* invalid opcode */
 
@@ -16,6 +18,11 @@ make_helper(inv) {
 			eip, temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]);
 
 	assert(0);
+}
+
+make_helper(escape_code) {
+	int instr_len = exec(eip + 1);
+	return 1 + instr_len;
 }
 
 make_helper(int3) {
