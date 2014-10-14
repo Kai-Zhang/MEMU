@@ -8,7 +8,7 @@ make_helper(concat(cmp_a2i_, SUFFIX)) {
 	
 	cpu.eflags.sign_flag = (rst < 0);
 	cpu.eflags.zero_flag = (rst == 0);
-	cpu.eflags.adjust_flag = ((rst >> 4) ^ (REG(R_EAX))) & 1;
+	cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (REG(R_EAX))) & 1;
 	cpu.eflags.carry_flag = (rst < REG(R_EAX));
 	cpu.eflags.overflow_flag = (((DATA_TYPE_S)REG(R_EAX) < 0) == ((DATA_TYPE_S)imm < 0))
 		&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)imm < 0));
@@ -34,7 +34,7 @@ make_helper(concat(cmp_rm2i_, SUFFIX)) {
 
 			cpu.eflags.sign_flag = (rst < 0);
 			cpu.eflags.zero_flag = (rst == 0);
-			cpu.eflags.adjust_flag = ((rst >> 4) ^ (REG(m.R_M))) & 1;
+			cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (REG(m.R_M))) & 1;
 			cpu.eflags.carry_flag = (rst < REG(m.R_M));
 			cpu.eflags.overflow_flag = (((DATA_TYPE_S)REG(m.R_M) < 0) == ((DATA_TYPE_S)imm < 0))
 				&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)imm < 0));
@@ -54,7 +54,7 @@ make_helper(concat(cmp_rm2i_, SUFFIX)) {
 
 			cpu.eflags.sign_flag = (rst < 0);
 			cpu.eflags.zero_flag = (rst == 0);
-			cpu.eflags.adjust_flag = ((rst >> 4) ^ (MEM_R(addr))) & 1;
+			cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (MEM_R(addr))) & 1;
 			cpu.eflags.carry_flag = (rst < MEM_R(addr));
 			cpu.eflags.overflow_flag = (((DATA_TYPE_S)MEM_R(addr) < 0) == ((DATA_TYPE_S)imm < 0))
 				&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)imm < 0));
@@ -87,7 +87,7 @@ make_helper(concat(cmp_rm2i8_, SUFFIX)) {
 
 			cpu.eflags.sign_flag = (rst < 0);
 			cpu.eflags.zero_flag = (rst == 0);
-			cpu.eflags.adjust_flag = ((rst >> 4) ^ (REG(m.R_M))) & 1;
+			cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (REG(m.R_M))) & 1;
 			cpu.eflags.carry_flag = (rst < REG(m.R_M));
 			cpu.eflags.overflow_flag = (((DATA_TYPE_S)REG(m.R_M) < 0) == ((DATA_TYPE_S)imm < 0))
 				&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)imm < 0));
@@ -107,7 +107,7 @@ make_helper(concat(cmp_rm2i8_, SUFFIX)) {
 
 			cpu.eflags.sign_flag = (rst < 0);
 			cpu.eflags.zero_flag = (rst == 0);
-			cpu.eflags.adjust_flag = ((rst >> 4) ^ (MEM_R(addr))) & 1;
+			cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (MEM_R(addr))) & 1;
 			cpu.eflags.carry_flag = (rst < MEM_R(addr));
 			cpu.eflags.overflow_flag = (((DATA_TYPE_S)MEM_R(addr) < 0) == ((DATA_TYPE_S)imm < 0))
 				&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)imm < 0));
@@ -137,7 +137,7 @@ make_helper(concat(cmp_rm2r_, SUFFIX)) {
 
 		cpu.eflags.sign_flag = (rst < 0);
 		cpu.eflags.zero_flag = (rst == 0);
-		cpu.eflags.adjust_flag = ((rst >> 4) ^ (REG(m.R_M))) & 1;
+		cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (REG(m.R_M))) & 1;
 		cpu.eflags.carry_flag = (rst < REG(m.R_M));
 		cpu.eflags.overflow_flag = (((DATA_TYPE_S)REG(m.R_M) < 0) == ((DATA_TYPE_S)REG(m.reg) < 0))
 			&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)REG(m.reg) < 0));
@@ -156,7 +156,7 @@ make_helper(concat(cmp_rm2r_, SUFFIX)) {
 
 		cpu.eflags.sign_flag = (rst < 0);
 		cpu.eflags.zero_flag = (rst == 0);
-		cpu.eflags.adjust_flag = ((rst >> 4) ^ (MEM_R(addr))) & 1;
+		cpu.eflags.auxiliary_flag = ((rst >> 4) ^ (MEM_R(addr))) & 1;
 		cpu.eflags.carry_flag = (rst < MEM_R(addr));
 		cpu.eflags.overflow_flag = (((DATA_TYPE_S)MEM_R(addr) < 0) == ((DATA_TYPE_S)REG(m.reg) < 0))
 			&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)REG(m.reg) < 0));
@@ -181,7 +181,7 @@ make_helper(concat(cmp_r2rm_, SUFFIX)) {
 
 		cpu.eflags.sign_flag = (rst < 0);
 		cpu.eflags.zero_flag = (rst == 0);
-		cpu.eflags.adjust_flag = ((rst >> 4) ^ REG(m.reg)) & 1;
+		cpu.eflags.auxiliary_flag = ((rst >> 4) ^ REG(m.reg)) & 1;
 		cpu.eflags.carry_flag = (rst < REG(m.reg));
 		cpu.eflags.overflow_flag = (((DATA_TYPE_S)REG(m.reg) < 0) == ((DATA_TYPE_S)REG(m.R_M) < 0))
 			&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)REG(m.R_M) < 0));
@@ -200,7 +200,7 @@ make_helper(concat(cmp_r2rm_, SUFFIX)) {
 
 		cpu.eflags.sign_flag = (rst < 0);
 		cpu.eflags.zero_flag = (rst == 0);
-		cpu.eflags.adjust_flag = ((rst >> 4) ^ REG(m.reg)) & 1;
+		cpu.eflags.auxiliary_flag = ((rst >> 4) ^ REG(m.reg)) & 1;
 		cpu.eflags.carry_flag = (rst < REG(m.reg));
 		cpu.eflags.overflow_flag = (((DATA_TYPE_S)REG(m.reg) < 0) == ((DATA_TYPE_S)MEM_R(addr) < 0))
 			&& (((DATA_TYPE_S)rst < 0) != ((DATA_TYPE_S)MEM_R(addr) < 0));

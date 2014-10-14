@@ -42,7 +42,7 @@ typedef union {
 				uint32_t sign_flag			: 1;
 				uint32_t zero_flag			: 1;
 				uint32_t					: 1;
-				uint32_t adjust_flag		: 1;
+				uint32_t auxiliary_flag		: 1;
 				uint32_t					: 1;
 				uint32_t parity_flag		: 1;
 				uint32_t rsv_1				: 1;

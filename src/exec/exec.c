@@ -28,13 +28,13 @@ helper_fun opcode_table [256] = {
 /* 0x44 */	inv, inv, inv, inv,
 /* 0x48 */	inv, inv, inv, inv, 
 /* 0x4c */	inv, inv, inv, inv, 
-/* 0x50 */	inv, inv, inv, inv, 
-/* 0x54 */	inv, inv, inv, inv,
+/* 0x50 */	push_r_v, push_r_v, push_r_v, push_r_v, 
+/* 0x54 */	push_r_v, push_r_v, push_r_v, push_r_v,
 /* 0x58 */	inv, inv, inv, inv, 
 /* 0x5c */	inv, inv, inv, inv, 
 /* 0x60 */	inv, inv, inv, inv,
 /* 0x64 */	inv, inv, data_size, inv,
-/* 0x68 */	inv, inv, inv, inv, 
+/* 0x68 */	push_i_v, inv, push_i_b, inv, 
 /* 0x6c */	inv, inv, inv, inv, 
 /* 0x70 */	inv, inv, inv, inv,
 /* 0x74 */	je_b, inv, inv, inv,
@@ -71,7 +71,7 @@ helper_fun opcode_table [256] = {
 /* 0xf0 */	inv, inv, inv, inv,
 /* 0xf4 */	inv, inv, test_rm2i_b, test_rm2i_v,
 /* 0xf8 */	inv, inv, inv, inv,
-/* 0xfc */	inv, inv, inv, inv
+/* 0xfc */	inv, inv, inv, push_m_v
 };
 
 make_helper(exec) {
