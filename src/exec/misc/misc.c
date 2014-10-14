@@ -27,7 +27,6 @@ make_helper(escape_code) {
 
 make_helper(int3) {
 	/* A breakpoint is hit! Do something here! */
-//	assert(0);
 	hit_bp = true;
 	nemu_state = BREAK;
 	printf("\nnemu: Hit Breakpoint %d at 0x%x\n", find_bp(cpu.eip), cpu.eip);
