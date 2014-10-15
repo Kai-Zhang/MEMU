@@ -31,12 +31,14 @@ make_helper(concat(push_m_, SUFFIX)) {
 make_helper(concat(push_r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
 	if(cpu.eflags.virutal_mode) {
+		// 8086 `pushw %sp' pushes the latest value
 		reg_w(R_SP) -= DATA_BYTE;
 		MEM_W(reg_w(R_SP), REG(reg_code));
 	}
 	else {
+		// 80386 `pushl %esp' pushes the former value
+		MEM_W(reg_l(R_ESP) - DATA_BYTE, REG(reg_code));
 		reg_l(R_ESP) -= DATA_BYTE;
-		MEM_W(reg_l(R_ESP), REG(reg_code));
 	}
 
 	print_asm("push %%%s", REG_NAME(reg_code));
