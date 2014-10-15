@@ -97,7 +97,7 @@ static void cmd_si(int step) {
 }
 
 static void cmd_i(char* arg) {
-	if (!arg) {
+	if(!arg) {
 		puts("\"info\" must be followed by the name of an info command.");
 		puts("List of info subcommands:\n");
 		puts("info registers		-- List of integer registers and their contents");
@@ -112,8 +112,14 @@ static void cmd_i(char* arg) {
 		printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
 		printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
 		printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
-		printf("eflags\tx%8x\t\n", cpu.eflags.value);
-
+		printf("eflags\t0x%x\t\t[", cpu.eflags.value);
+		int i = B_CF;
+		for( ; i <= B_VM; ++i) {
+			if((cpu.eflags.value >> i) & 1) {
+				printf("%s ", regf[i]);
+			}
+		}
+		puts("]");
 	} else if(strcmp(arg, "b") == 0) {
 		show_bp();
 	} else {
