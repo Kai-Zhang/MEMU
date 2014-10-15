@@ -106,7 +106,7 @@ make_helper(concat(test_rm2r_, SUFFIX)) {
 	cpu.eflags.carry_flag = 0;
 	cpu.eflags.overflow_flag = 0;
 
-	return 1 + len + DATA_BYTE;
+	return 1 + len;
 }
 
 #include "exec/template-end.h"
