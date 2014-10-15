@@ -222,6 +222,8 @@ uint32_t eval(int start, int end, bool *success) {
 								return reg_l(i);
 						if(strcasecmp("eip", tokens[start].str) == 0)
 							return cpu.eip;
+						if(strcasecmp("eflags", tokens[start].str) == 0)
+							return cpu.eflags.value;
 						*success = false;	return 0;
 			default:	*success = false;	return 0;
 		}
