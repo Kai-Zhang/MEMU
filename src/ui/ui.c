@@ -112,6 +112,8 @@ static void cmd_i(char* arg) {
 		printf("esi\t0x%08x\t%d\n", reg_l(R_ESI), reg_l(R_ESI));
 		printf("edi\t0x%08x\t%d\n", reg_l(R_EDI), reg_l(R_EDI));
 		printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
+		printf("eflags\tx%8x\t\n", cpu.eflags.value);
+
 	} else if(strcmp(arg, "b") == 0) {
 		show_bp();
 	} else {
