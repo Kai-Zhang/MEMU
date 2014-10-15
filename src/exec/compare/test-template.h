@@ -79,11 +79,12 @@ make_helper(concat(test_rm2r_, SUFFIX)) {
 
 		cpu.eflags.sign_flag = (rst < 0);
 		cpu.eflags.zero_flag = (rst == 0);
-		cpu.eflags.parity_flag = 0;
+		bool pf = false;
 		while (rst) {
-			cpu.eflags.parity_flag = !cpu.eflags.parity_flag;
+			pf = !pf;
 			rst = rst & (rst - 1);
 		}
+		cpu.eflags.parity_flag = pf;
 
 		print_asm("test" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
 	}
