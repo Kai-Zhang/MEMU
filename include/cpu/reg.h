@@ -29,24 +29,25 @@ typedef union {
 		swaddr_t eip;
 		union {
 			struct {
-				uint32_t					: 14;
-				uint32_t virutal_mode		: 1;
-				uint32_t resume_flag		: 1;
-				uint32_t					: 1;
-				uint32_t nested_task		: 1;
-				uint32_t IO_privilege		: 2;
-				uint32_t overflow_flag		: 1;
-				uint32_t direction_flag		: 1;
-				uint32_t interrupt_flag		: 1;
-				uint32_t trap_flag			: 1;
-				uint32_t sign_flag			: 1;
-				uint32_t zero_flag			: 1;
+				uint32_t carry_flag			: 1;
+				uint32_t rsv_1				: 1;
+				uint32_t parity_flag		: 1;
 				uint32_t					: 1;
 				uint32_t auxiliary_flag		: 1;
 				uint32_t					: 1;
-				uint32_t parity_flag		: 1;
-				uint32_t rsv_1				: 1;
-				uint32_t carry_flag			: 1;
+				uint32_t zero_flag			: 1;
+				uint32_t sign_flag			: 1;
+				uint32_t trap_flag			: 1;
+				uint32_t interrupt_flag		: 1;
+				uint32_t direction_flag		: 1;
+				uint32_t overflow_flag		: 1;
+				uint32_t IO_privilege_l		: 1;
+				uint32_t IO_privilege_h		: 1;
+				uint32_t nested_task		: 1;
+				uint32_t					: 1;
+				uint32_t resume_flag		: 1;
+				uint32_t virutal_mode		: 1;
+				uint32_t					: 14;
 			};
 			uint32_t value;
 		} eflags;
@@ -60,7 +61,7 @@ enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
 
 enum { B_CF, B_PF = 2, B_AF = 4, B_ZF = 6, B_SF, B_TF, B_IF, B_DF, B_OF,
-	B_IOPL_0, B_IOPL_1, B_NT, B_RF = 17, B_VM };
+	B_IOPL_l, B_IOPL_h, B_NT, B_RF = 17, B_VM };
 
 #define reg_l(index) (cpu.gpr[index]._32)
 #define reg_w(index) (cpu.gpr[index]._16)
