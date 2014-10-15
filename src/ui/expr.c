@@ -285,9 +285,9 @@ uint32_t expr_calc(char *e, bool *success) {
 
 	int i = 0;
 	for (; i < nr_token-1; ++i) {
-		if(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != NUM && tokens[i-1].type != HEX)) {
+		if(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != NUM && tokens[i-1].type != HEX && tokens[i-1].type != REG)) {
 			switch(tokens[i].type) {
-				case '*':	tokens[i].type = DEREF;	break;
+				case '*':	tokens[i].type = DEREF;		break;
 				case '+':	tokens[i].type = POS;		break;
 				case '-':	tokens[i].type = NEG;		break;
 			}
