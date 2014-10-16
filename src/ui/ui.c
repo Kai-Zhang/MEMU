@@ -115,11 +115,11 @@ static void cmd_i(char* arg) {
 		printf("eflags\t0x%x\t\t[", cpu.eflags.value);
 		int i = B_CF;
 		for( ; i <= B_VM; ++i) {
-			if((cpu.eflags.value >> i) & 1) {
-				printf("%s ", regf[i]);
+			if((i != 1) && ((cpu.eflags.value >> i) & 1)) {
+				printf(" %s", regf[i]);
 			}
 		}
-		puts("]");
+		puts(" ]");
 	} else if(strcmp(arg, "b") == 0) {
 		show_bp();
 	} else {
