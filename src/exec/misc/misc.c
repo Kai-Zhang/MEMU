@@ -6,8 +6,7 @@
 
 #include "nemu.h"
 
-
-int je_v(swaddr_t);
+#include "escaped_instr.h"
 
 make_helper(inv) {
 	/* invalid opcode */
@@ -24,8 +23,10 @@ make_helper(inv) {
 make_helper(escape_code) {
 	int instr_len = 0;
 	switch(instr_fetch(eip + 1, 1)) {
-		case 0x84:	instr_len = je_v(eip + 1);	break;
-		default:	instr_len = inv(eip);	break;
+		case 0x84:	instr_len = je_v(eip + 1);		break;
+		case 0xbe:	instr_len = movsx_v(eip + 1);	break;
+		case 0xbf:	instr_len = movsx_w2l(eip + 1);	break;
+		default:	instr_len = inv(eip);			break;
 	}
 
 	return 1 + instr_len;
