@@ -26,6 +26,8 @@ make_helper(escape_code) {
 		case 0x84:	instr_len = je_v(eip + 1);		break;
 		case 0xbe:	instr_len = movsx_v(eip + 1);	break;
 		case 0xbf:	instr_len = movsx_w2l(eip + 1);	break;
+		case 0xb6:	instr_len = movzx_v(eip + 1);	break;
+		case 0xb7:	instr_len = movzx_w2l(eip + 1);	break;
 		default:	instr_len = inv(eip);			break;
 	}
 
