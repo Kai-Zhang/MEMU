@@ -1,9 +1,11 @@
 #include "prefix/prefix.h"
 
 #include "data-mov/mov.h"
-#include "jump/jump.h"
+#include "data-mov/xchg.h"
+#include "data-mov/push.h"
+#include "data-mov/pop.h"
+#include "ctrl-trans/jump.h"
 #include "compare/cmp.h"
 #include "compare/test.h"
-#include "stack-rw/push.h"
 
 #include "misc/misc.h"

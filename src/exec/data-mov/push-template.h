@@ -24,7 +24,7 @@ make_helper(concat(push_m_, SUFFIX)) {
 		assert(0);
 	}
 
-	print_asm("push %s", ModR_M_asm);
+	print_asm("push" str(SUFFIX) " %s", ModR_M_asm);
 	return 1 + len;
 }
 
@@ -41,7 +41,7 @@ make_helper(concat(push_r_, SUFFIX)) {
 		reg_l(R_ESP) -= DATA_BYTE;
 	}
 
-	print_asm("push %%%s", REG_NAME(reg_code));
+	print_asm("push" str(SUFFIX) " %%%s", REG_NAME(reg_code));
 	return 1;
 }
 
@@ -56,7 +56,7 @@ make_helper(concat(push_i_, SUFFIX)) {
 		MEM_W(reg_l(R_ESP), imm);
 	}
 
-	print_asm("push $0x%x", imm);
+	print_asm("push" str(SUFFIX) " $0x%x", imm);
 	return 1;
 }
 
