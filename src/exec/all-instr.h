@@ -6,7 +6,6 @@
 #include "data-mov/pop.h"
 #include "data-mov/movx.h"
 #include "arithmetic/add-sub.h"
-#include "arithmetic/cmp.h"
 #include "logical/test.h"
 #include "ctrl-trans/jump.h"
 #include "flag-ctrl/flag.h"
