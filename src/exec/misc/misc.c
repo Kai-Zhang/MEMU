@@ -23,7 +23,22 @@ make_helper(inv) {
 make_helper(escape_code) {
 	int instr_len = 0;
 	switch(instr_fetch(eip + 1, 1)) {
+		case 0x80:	instr_len = jo_v(eip + 1);		break;
+		case 0x81:	instr_len = jno_v(eip + 1);		break;
+		case 0x82:	instr_len = jb_v(eip + 1);		break;
+		case 0x83:	instr_len = jae_v(eip + 1);		break;
 		case 0x84:	instr_len = je_v(eip + 1);		break;
+		case 0x85:	instr_len = jne_v(eip + 1);		break;
+		case 0x86:	instr_len = jbe_v(eip + 1);		break;
+		case 0x87:	instr_len = ja_v(eip + 1);		break;
+		case 0x88:	instr_len = js_v(eip + 1);		break;
+		case 0x89:	instr_len = jns_v(eip + 1);		break;
+		case 0x8a:	instr_len = jp_v(eip + 1);		break;
+		case 0x8b:	instr_len = jnp_v(eip + 1);		break;
+		case 0x8c:	instr_len = jl_v(eip + 1);		break;
+		case 0x8d:	instr_len = jge_v(eip + 1);		break;
+		case 0x8e:	instr_len = jle_v(eip + 1);		break;
+		case 0x8f:	instr_len = jg_v(eip + 1);		break;
 		case 0x90:	instr_len = seto(eip + 1);		break;
 		case 0x91:	instr_len = setno(eip + 1);		break;
 		case 0x92:	instr_len = setb(eip + 1);		break;

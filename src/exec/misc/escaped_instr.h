@@ -23,6 +23,22 @@ make_helper(setns);
 make_helper(seto);
 make_helper(setp);
 make_helper(sets);
+make_helper(ja_v);
+make_helper(jae_v);
+make_helper(jb_v);
+make_helper(jbe_v);
+make_helper(je_v);
+make_helper(jg_v);
+make_helper(jge_v);
+make_helper(jl_v);
+make_helper(jle_v);
+make_helper(jne_v);
+make_helper(jno_v);
+make_helper(jnp_v);
+make_helper(jns_v);
+make_helper(jo_v);
+make_helper(jp_v);
+make_helper(js_v);
 
 #endif
 

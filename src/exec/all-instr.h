@@ -12,7 +12,7 @@
 #include "logical/shift.h"
 #include "logical/setcc.h"
 #include "logical/test.h"
-#include "ctrl-trans/jump.h"
+#include "ctrl-trans/jcc.h"
 #include "flag-ctrl/flag.h"
 
 #include "misc/misc.h"
