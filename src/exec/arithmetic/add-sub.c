@@ -7,33 +7,33 @@
 #define OP_SYMBOL +
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME adc
 #define OP_SYMBOL +
 #define CARRY cpu.eflags.carry_flag
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME sub
 #define OP_SYMBOL -
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME sbb
 #define OP_SYMBOL -
 #define CARRY cpu.eflags.carry_flag
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #include "addsub-rm-i.h"
 #undef DATA_BYTE
@@ -43,33 +43,33 @@
 #define OP_SYMBOL +
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME adc
 #define OP_SYMBOL +
 #define CARRY cpu.eflags.carry_flag
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME sub
 #define OP_SYMBOL -
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME sbb
 #define OP_SYMBOL -
 #define CARRY cpu.eflags.carry_flag
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #include "addsub-rm-i.h"
 #undef DATA_BYTE
@@ -79,33 +79,33 @@
 #define OP_SYMBOL +
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME adc
 #define OP_SYMBOL +
 #define CARRY cpu.eflags.carry_flag
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME sub
 #define OP_SYMBOL -
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #define OP_NAME sbb
 #define OP_SYMBOL -
 #define CARRY cpu.eflags.carry_flag
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 
 #include "addsub-rm-i.h"
 #undef DATA_BYTE
@@ -117,9 +117,9 @@
 #define OP_SYMBOL -
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 #undef DATA_BYTE
 
 #define DATA_BYTE 2
@@ -127,9 +127,9 @@
 #define OP_SYMBOL -
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 #undef DATA_BYTE
 
 #define DATA_BYTE 4
@@ -137,8 +137,8 @@
 #define OP_SYMBOL -
 #define CARRY 0
 #include "add-sub-template.h"
-#undef OP_NAME
-#undef OP_SYMBOL
 #undef CARRY
+#undef OP_SYMBOL
+#undef OP_NAME
 #undef DATA_BYTE
 

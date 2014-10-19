@@ -61,6 +61,23 @@ make_helper(concat(test_rm_i_, SUFFIX)) {
 				print_asm("test" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
 			break;
+		case 2:
+			if(m.mod == 3) {
+				DATA_TYPE rst = ~REG(m.R_M);
+				REG(m.R_M) = rst;
+
+				print_asm("not %%%s", REG_NAME(m.R_M));
+			}
+			else {
+				swaddr_t addr;
+				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE rst = ~MEM_R(addr);
+				MEM_W(addr, rst);
+
+				print_asm("not" str(SUFFIX) " %s", ModR_M_asm);
+			}
+
+			return 1;
 		case 3:
 			if(m.mod == 3) {
 				DATA_TYPE rst = -REG(m.R_M);
@@ -78,7 +95,7 @@ make_helper(concat(test_rm_i_, SUFFIX)) {
 
 				neg_flags(rst);
 
-				print_asm("neg %s", ModR_M_asm);
+				print_asm("neg" str(SUFFIX) " %s", ModR_M_asm);
 			}
 
 			return 1;
