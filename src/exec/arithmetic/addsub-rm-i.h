@@ -1,7 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 
-make_helper(concat(add_sub_rm2i_, SUFFIX)) {
+make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);
 	DATA_TYPE imm = 0, rst = 0;
@@ -125,7 +125,7 @@ make_helper(concat(add_sub_rm2i_, SUFFIX)) {
 
 #if DATA_BYTE != 1
 
-make_helper(concat(add_sub_rm2i8_, SUFFIX)) {
+make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);
 	int8_t imm = 0;
@@ -251,12 +251,12 @@ make_helper(concat(add_sub_rm2i8_, SUFFIX)) {
 #endif
 #if DATA_BYTE == 4
 
-make_helper(add_sub_rm2i_v) {
-	return (suffix == 'l' ? add_sub_rm2i_l(eip) : add_sub_rm2i_w(eip));
+make_helper(add_sub_rm_i_v) {
+	return (suffix == 'l' ? add_sub_rm_i_l(eip) : add_sub_rm_i_w(eip));
 }
 
-make_helper(add_sub_rm2i8_v) {
-	return (suffix == 'l' ? add_sub_rm2i8_l(eip) : add_sub_rm2i8_w(eip));
+make_helper(add_sub_rm_i8_v) {
+	return (suffix == 'l' ? add_sub_rm_i8_l(eip) : add_sub_rm_i8_w(eip));
 }
 
 #endif

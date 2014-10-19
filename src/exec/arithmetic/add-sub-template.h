@@ -15,7 +15,7 @@
 		(rst) = (rst) & ((rst) - 1); \
 	}
 
-make_helper(concat(concat(OP_NAME, _a2i_), SUFFIX)) {
+make_helper(concat(concat(OP_NAME, _a_i_), SUFFIX)) {
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
 	DATA_TYPE rst = REG(R_EAX) OP_SYMBOL (imm + CARRY);
 #ifdef WRITE_BACK
@@ -29,7 +29,7 @@ make_helper(concat(concat(OP_NAME, _a2i_), SUFFIX)) {
 }
 
 
-make_helper(concat(concat(OP_NAME, _rm2r_), SUFFIX)) {
+make_helper(concat(concat(OP_NAME, _rm_r_), SUFFIX)) {
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);
 	DATA_TYPE rst = 0;
@@ -60,7 +60,7 @@ make_helper(concat(concat(OP_NAME, _rm2r_), SUFFIX)) {
 	return 1 + len;
 }
 
-make_helper(concat(concat(OP_NAME, _r2rm_), SUFFIX)) {
+make_helper(concat(concat(OP_NAME, _r_rm_), SUFFIX)) {
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);
 	DATA_TYPE rst = 0;
@@ -95,16 +95,16 @@ make_helper(concat(concat(OP_NAME, _r2rm_), SUFFIX)) {
 
 extern char suffix;
 
-make_helper(concat(OP_NAME, _a2i_v)) {
-	return (suffix == 'l' ? concat(OP_NAME, _a2i_l)(eip) : concat(OP_NAME, _a2i_w)(eip));
+make_helper(concat(OP_NAME, _a_i_v)) {
+	return (suffix == 'l' ? concat(OP_NAME, _a_i_l)(eip) : concat(OP_NAME, _a_i_w)(eip));
 }
 
-make_helper(concat(OP_NAME, _rm2r_v)) {
-	return (suffix == 'l' ? concat(OP_NAME, _rm2r_l)(eip) : concat(OP_NAME, _rm2r_w)(eip));
+make_helper(concat(OP_NAME, _rm_r_v)) {
+	return (suffix == 'l' ? concat(OP_NAME, _rm_r_l)(eip) : concat(OP_NAME, _rm_r_w)(eip));
 }
 
-make_helper(concat(OP_NAME, _r2rm_v)) {
-	return (suffix == 'l' ? concat(OP_NAME, _r2rm_l)(eip) : concat(OP_NAME, _r2rm_w)(eip));
+make_helper(concat(OP_NAME, _r_rm_v)) {
+	return (suffix == 'l' ? concat(OP_NAME, _r_rm_l)(eip) : concat(OP_NAME, _r_rm_w)(eip));
 }
 
 #endif

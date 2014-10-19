@@ -14,15 +14,15 @@
 
 extern char suffix;
 
-make_helper(test_a2i_v) {
-	return (suffix == 'l' ? test_a2i_l(eip) : test_a2i_w(eip));
+make_helper(test_a_i_v) {
+	return (suffix == 'l' ? test_a_i_l(eip) : test_a_i_w(eip));
 }
 
-make_helper(test_rm2i_v) {
-	return (suffix == 'l' ? test_rm2i_l(eip) : test_rm2i_w(eip));
+make_helper(test_rm_i_v) {
+	return (suffix == 'l' ? test_rm_i_l(eip) : test_rm_i_w(eip));
 }
 
-make_helper(test_rm2r_v) {
-	return (suffix == 'l' ? test_rm2r_l(eip) : test_rm2r_w(eip));
+make_helper(test_rm_r_v) {
+	return (suffix == 'l' ? test_rm_r_l(eip) : test_rm_r_w(eip));
 }
 

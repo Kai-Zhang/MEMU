@@ -24,6 +24,7 @@ make_helper(escape_code) {
 	int instr_len = 0;
 	switch(instr_fetch(eip + 1, 1)) {
 		case 0x84:	instr_len = je_v(eip + 1);		break;
+		case 0xaf:	instr_len = imul_r_rm_v(eip);	break;
 		case 0xbe:	instr_len = movsx_v(eip + 1);	break;
 		case 0xbf:	instr_len = movsx_w2l(eip + 1);	break;
 		case 0xb6:	instr_len = movzx_v(eip + 1);	break;

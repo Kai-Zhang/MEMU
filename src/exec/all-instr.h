@@ -7,6 +7,7 @@
 #include "data-mov/movx.h"
 #include "arithmetic/add-sub.h"
 #include "arithmetic/ari-misc.h"
+#include "arithmetic/imul.h"
 #include "logical/test.h"
 #include "ctrl-trans/jump.h"
 #include "flag-ctrl/flag.h"
