@@ -24,6 +24,22 @@ make_helper(escape_code) {
 	int instr_len = 0;
 	switch(instr_fetch(eip + 1, 1)) {
 		case 0x84:	instr_len = je_v(eip + 1);		break;
+		case 0x90:	instr_len = seto(eip + 1);		break;
+		case 0x91:	instr_len = setno(eip + 1);		break;
+		case 0x92:	instr_len = setb(eip + 1);		break;
+		case 0x93:	instr_len = setae(eip + 1);		break;
+		case 0x94:	instr_len = sete(eip + 1);		break;
+		case 0x95:	instr_len = setne(eip + 1);		break;
+		case 0x96:	instr_len = setbe(eip + 1);		break;
+		case 0x97:	instr_len = seta(eip + 1);		break;
+		case 0x98:	instr_len = sets(eip + 1);		break;
+		case 0x99:	instr_len = setns(eip + 1);		break;
+		case 0x9a:	instr_len = setp(eip + 1);		break;
+		case 0x9b:	instr_len = setnp(eip + 1);		break;
+		case 0x9c:	instr_len = setl(eip + 1);		break;
+		case 0x9d:	instr_len = setge(eip + 1);		break;
+		case 0x9e:	instr_len = setle(eip + 1);		break;
+		case 0x9f:	instr_len = setg(eip + 1);		break;
 		case 0xaf:	instr_len = imul_r_rm_v(eip);	break;
 		case 0xbe:	instr_len = movsx_v(eip + 1);	break;
 		case 0xbf:	instr_len = movsx_w2l(eip + 1);	break;

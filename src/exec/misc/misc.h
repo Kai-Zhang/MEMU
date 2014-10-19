@@ -5,5 +5,6 @@ make_helper(inv);
 make_helper(escape_code);
 make_helper(int3);
 make_helper(nemu_trap);
+make_helper(lea_v);
 
 #endif
