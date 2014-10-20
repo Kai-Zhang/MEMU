@@ -2,12 +2,9 @@
 #include "exec/template-start.h"
 
 make_helper(concat(concat(concat(j, CC), _), SUFFIX)) {
-	DATA_TYPE_S offset = 0;
+	DATA_TYPE_S offset = instr_fetch(eip + 1, DATA_BYTE);
 	if (COND) {
-		offset = instr_fetch(eip + 1, DATA_BYTE);
 		cpu.eip += (int32_t)offset;
-		printf("%d\n", (int32_t)offset);
-		printf("%x\n", (int32_t)cpu.eip);
 #if DATA_BYTE == 2
 		cpu.eip &= 0xffff;
 #endif
