@@ -59,12 +59,39 @@ make_helper(concat(push_m_, SUFFIX)) {
 			}
 			break;
 #if DATA_BYTE != 1
+		case 2:
+			if(m.mod == 3) {
+				reg_l(R_ESP) -= DATA_BYTE;
+				MEM_W(reg_w(R_ESP), cpu.eip);
+#if DATA_BYTE == 2
+				cpu.eip = REG(m.R_M) & 0xffff;
+#else
+				cpu.eip = REG(m.R_M) - (1 + len);
+#endif
+
+				print_asm("call %%%s", REG_NAME(m.R_M));
+			}
+			else {
+				swaddr_t addr;
+				len = read_ModR_M(eip + 1, &addr);
+				reg_l(R_ESP) -= DATA_BYTE;
+				MEM_W(reg_w(R_ESP), cpu.eip);
+				cpu.eip += (int32_t)(DATA_TYPE_S)MEM_R(addr);
+#if DATA_BYTE == 2
+				cpu.eip = MEM_R(addr) & 0xffff;
+#else
+				cpu.eip = MEM_R(addr);
+#endif
+
+				print_asm("call %s", ModR_M_asm);
+			}
+			break;
 		case 4:
 			if(m.mod == 3) {
 #if DATA_BYTE == 2
-				cpu.eip = (REG(m.R_M) & 0xffff) - (1 + len);
+				cpu.eip = REG(m.R_M) & 0xffff;
 #else
-				cpu.eip = REG(m.R_M) - (1 + len);
+				cpu.eip = REG(m.R_M);
 #endif
 
 				print_asm("jmp %%%s", REG_NAME(m.R_M));
@@ -74,9 +101,9 @@ make_helper(concat(push_m_, SUFFIX)) {
 				len = read_ModR_M(eip + 1, &addr);
 				cpu.eip += (int32_t)(DATA_TYPE_S)MEM_R(addr);
 #if DATA_BYTE == 2
-				cpu.eip = (MEM_R(addr) & 0xffff) - (1 + len);
+				cpu.eip = MEM_R(addr) & 0xffff;
 #else
-				cpu.eip = MEM_R(addr) - (1 + len);
+				cpu.eip = MEM_R(addr);
 #endif
 
 				print_asm("jmp %s", ModR_M_asm);
