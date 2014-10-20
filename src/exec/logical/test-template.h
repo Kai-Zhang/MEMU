@@ -7,8 +7,7 @@
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.auxiliary_flag = (rst) >> 4; \
 	cpu.eflags.carry_flag = ((rst) != 0); \
-	cpu.eflags.overflow_flag = (((DATA_TYPE_S)(-(rst)) < 0) == 0) \
-		&& (((DATA_TYPE_S)(rst) < 0) != 0); \
+	cpu.eflags.overflow_flag = ((DATA_TYPE_S)(-(rst)) >= 0) && ((DATA_TYPE_S)(rst) >= 0); \
 	cpu.eflags.parity_flag = 0; \
 	while (rst) { \
 		cpu.eflags.parity_flag = !cpu.eflags.parity_flag; \
