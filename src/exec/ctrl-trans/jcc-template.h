@@ -3,14 +3,16 @@
 
 make_helper(concat(concat(concat(j, CC), _), SUFFIX)) {
 	DATA_TYPE_S offset = instr_fetch(eip + 1, DATA_BYTE);
-	if (COND) {
-		cpu.eip += (int32_t)offset;
+	swaddr_t eip_temp = cpu.eip;
+	cpu.eip += (int32_t)offset;
 #if DATA_BYTE == 2
-		cpu.eip &= 0xffff;
+	cpu.eip &= 0xffff;
 #endif
+	if (COND) {
+		cpu.eip = eip_temp;
 	}
 
-	print_asm("j" str(CC) " %x", cpu.eip + 1 + DATA_BYTE);
+	print_asm("j" str(CC) " %x", eip_temp + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
 
