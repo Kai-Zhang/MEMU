@@ -6,7 +6,7 @@
 	cpu.eflags.sign_flag = ((DATA_TYPE_S)(rst) < 0); \
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.auxiliary_flag = ((rst) ^ (lhs)) >> 4; \
-	cpu.eflags.carry_flag = ((rst) < (lhs)); \
+	cpu.eflags.carry_flag = ((rst) CARRY_COND (lhs)); \
 	cpu.eflags.overflow_flag = (((DATA_TYPE_S)(lhs) < 0) == ((DATA_TYPE_S)(rhs) < 0)) \
 		&& (((DATA_TYPE_S)(rst) < 0) != ((DATA_TYPE_S)(lhs) < 0)); \
 	cpu.eflags.parity_flag = 0; \
@@ -109,4 +109,5 @@ make_helper(concat(OP_NAME, _r_rm_v)) {
 
 #endif
 
+#undef arithmetic_flags
 #include "exec/template-end.h"

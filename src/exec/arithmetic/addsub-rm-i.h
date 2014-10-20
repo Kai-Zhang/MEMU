@@ -1,6 +1,18 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 
+#define arithmetic_flags(rst, lhs, rhs) \
+	cpu.eflags.sign_flag = ((DATA_TYPE_S)(rst) < 0); \
+	cpu.eflags.zero_flag = ((rst) == 0); \
+	cpu.eflags.auxiliary_flag = ((rst) ^ (lhs)) >> 4; \
+	cpu.eflags.overflow_flag = (((DATA_TYPE_S)(lhs) < 0) == ((DATA_TYPE_S)(rhs) < 0)) \
+		&& (((DATA_TYPE_S)(rst) < 0) != ((DATA_TYPE_S)(lhs) < 0)); \
+	cpu.eflags.parity_flag = 0; \
+	while (rst) { \
+		cpu.eflags.parity_flag = !cpu.eflags.parity_flag; \
+		(rst) = (rst) & ((rst) - 1); \
+	}
+
 #define logical_flags(rst) \
 	cpu.eflags.carry_flag = 0; \
 	cpu.eflags.overflow_flag = 0; \
@@ -25,6 +37,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), imm);
+				cpu.eflags.carry_flag = rst < REG(m.R_M);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -36,6 +49,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), imm);
+				cpu.eflags.carry_flag = rst < MEM_R(addr);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -69,6 +83,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), imm + cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst < REG(m.R_M);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -80,6 +95,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), imm + cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst < MEM_R(addr);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -91,6 +107,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), - imm - cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst > REG(m.R_M);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -102,6 +119,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), - imm - cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst > MEM_R(addr);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -135,6 +153,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), - imm);
+				cpu.eflags.carry_flag = rst > REG(m.R_M);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -146,6 +165,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), - imm);
+				cpu.eflags.carry_flag = rst > MEM_R(addr);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -177,6 +197,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				rst = REG(m.R_M) - imm;
 
 				arithmetic_flags(rst, REG(m.R_M), - imm);
+				cpu.eflags.carry_flag = rst > REG(m.R_M);
 
 				print_asm("cmp" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -187,6 +208,7 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 				rst = MEM_R(addr) - imm;
 
 				arithmetic_flags(rst, MEM_R(addr), - imm);
+				cpu.eflags.carry_flag = rst > MEM_R(addr);
 
 				print_asm("cmp" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -215,6 +237,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), (DATA_TYPE_S)imm);
+				cpu.eflags.carry_flag = rst < REG(m.R_M);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -226,6 +249,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), (DATA_TYPE_S)imm);
+				cpu.eflags.carry_flag = rst < MEM_R(addr);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -259,6 +283,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), (DATA_TYPE_S)imm + cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst < REG(m.R_M);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -270,6 +295,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), (DATA_TYPE_S)imm + cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst < MEM_R(addr);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -281,6 +307,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), - (DATA_TYPE_S)imm - cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst > REG(m.R_M);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -292,6 +319,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), - (DATA_TYPE_S)imm - cpu.eflags.carry_flag);
+				cpu.eflags.carry_flag = rst > MEM_R(addr);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -325,6 +353,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				REG(m.R_M) = rst;
 
 				arithmetic_flags(rst, REG(m.R_M), - (DATA_TYPE_S)imm);
+				cpu.eflags.carry_flag = rst > REG(m.R_M);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -336,6 +365,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				MEM_W(addr, rst);
 
 				arithmetic_flags(rst, MEM_R(addr), - (DATA_TYPE_S)imm);
+				cpu.eflags.carry_flag = rst > MEM_R(addr);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -368,6 +398,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				rst = REG(m.R_M) - (DATA_TYPE_S)imm;
 
 				arithmetic_flags(rst, REG(m.R_M), - (DATA_TYPE_S)imm);
+				cpu.eflags.carry_flag = rst > REG(m.R_M);
 
 				print_asm("cmp" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
@@ -378,6 +409,7 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 				rst = MEM_R(addr) - (DATA_TYPE_S)imm;
 
 				arithmetic_flags(rst, MEM_R(addr), - (DATA_TYPE_S)imm);
+				cpu.eflags.carry_flag = rst > MEM_R(addr);
 
 				print_asm("cmp" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -404,5 +436,6 @@ make_helper(add_sub_rm_i8_v) {
 #endif
 
 #undef logical_flags
+#undef arithmetic_flags
 
 #include "exec/template-end.h"

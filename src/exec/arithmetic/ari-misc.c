@@ -12,7 +12,6 @@
 	cpu.eflags.sign_flag = ((int8_t)(rst) < 0); \
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.auxiliary_flag = ((rst) ^ (rst op 1)) >> 4; \
-	cpu.eflags.carry_flag = ((uint8_t)(rst) < (uint8_t)(rst op 1)); \
 	cpu.eflags.overflow_flag = ((int8_t)(rst op 1) >= 0) && ((int8_t)(rst) >= 0); \
 	cpu.eflags.parity_flag = 0; \
 	while (rst) { \
@@ -30,7 +29,8 @@ make_helper(inc_dec_rm_b) {
 			if(m.mod == 3) {
 				rst = ++ reg_b(m.R_M);
 
-				inc_dec_flags(rst, +);
+				inc_dec_flags(rst, -);
+				cpu.eflags.carry_flag = (uint8_t)rst < (uint8_t)(rst - 1);
 
 				print_asm("inc %%%s", regsb[m.R_M]);
 			}
@@ -40,7 +40,8 @@ make_helper(inc_dec_rm_b) {
 				rst = swaddr_read(addr, 1) + 1;
 				swaddr_write(addr, 1, rst);
 
-				inc_dec_flags(rst, +);
+				inc_dec_flags(rst, -);
+				cpu.eflags.carry_flag = (uint8_t)rst < (uint8_t)(rst - 1);
 
 				print_asm("inc %s", ModR_M_asm);
 			}
@@ -49,7 +50,8 @@ make_helper(inc_dec_rm_b) {
 			if(m.mod == 3) {
 				rst = -- reg_b(m.R_M);
 
-				inc_dec_flags(rst, -);
+				inc_dec_flags(rst, +);
+				cpu.eflags.carry_flag = (uint8_t)rst > (uint8_t)(rst + 1);
 
 				print_asm("dec %%%s", regsb[m.R_M]);
 			}
@@ -59,7 +61,8 @@ make_helper(inc_dec_rm_b) {
 				rst = swaddr_read(addr, 1) - 1;
 				swaddr_write(addr, 1, rst);
 
-				inc_dec_flags(rst, -);
+				inc_dec_flags(rst, +);
+				cpu.eflags.carry_flag = (uint8_t)rst > (uint8_t)(rst + 1);
 
 				print_asm("dec %s", ModR_M_asm);
 			}
