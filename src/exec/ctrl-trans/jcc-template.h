@@ -10,7 +10,7 @@ make_helper(concat(concat(concat(j, CC), _), SUFFIX)) {
 #endif
 	}
 
-	print_asm("j" str(CC) " %x", eip + 1 + DATA_BYTE + offset);
+	print_asm("j" str(CC) " %x", cpu.eip + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
 

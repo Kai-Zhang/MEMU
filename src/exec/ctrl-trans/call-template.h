@@ -12,7 +12,7 @@ make_helper(concat(call_rel_, SUFFIX)) {
 	cpu.eip &= 0xffff;
 #endif
 
-	print_asm("call $0x%x", offset);
+	print_asm("call %x", cpu.eip + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
 

@@ -9,7 +9,7 @@ make_helper(concat(jmp_rel_, SUFFIX)) {
 	cpu.eip &= 0xffff;
 #endif
 
-	print_asm("jmp $0x%x", offset);
+	print_asm("jmp %x", cpu.eip + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
 
