@@ -16,6 +16,7 @@
 #include "ctrl-trans/jmp.h"
 #include "ctrl-trans/call.h"
 #include "ctrl-trans/ret.h"
+#include "str-trans/movs.h"
 #include "flag-ctrl/flag.h"
 
 #include "misc/misc.h"
