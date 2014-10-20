@@ -36,7 +36,7 @@ make_helper(leave) {
 	}
 	else {
 		reg_w(R_BP) = swaddr_read(reg_l(R_ESP), 2);
-		reg_l(R_ESP) += 4;
+		reg_l(R_ESP) += 2;
 	}
 
 	print_asm("leave");
