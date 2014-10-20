@@ -64,7 +64,7 @@
 #undef CC
 
 #define CC le
-#define COND FLAG(zero_flag) && (FLAG(sign_flag) != FLAG(overflow_flag))
+#define COND FLAG(zero_flag) || (FLAG(sign_flag) != FLAG(overflow_flag))
 #include "jcc-template.h"
 #undef COND
 #undef CC

@@ -52,7 +52,7 @@
 #undef COND
 
 #define COND le
-#define FLAGS FLAG(zero_flag) && (FLAG(sign_flag) != FLAG(overflow_flag))
+#define FLAGS FLAG(zero_flag) || (FLAG(sign_flag) != FLAG(overflow_flag))
 #include "setcc-template.h"
 #undef FLAGS
 #undef COND
