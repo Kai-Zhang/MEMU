@@ -17,13 +17,13 @@
 
 make_helper(concat(concat(OP_NAME, _a_i_), SUFFIX)) {
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
-	DATA_TYPE rst = REG(R_EAX) OP_SYMBOL (imm + CARRY);
-
-	arithmetic_flags(rst, REG(R_EAX), OP_SYMBOL(imm + CARRY));
-
+	DATA_TYPE lhs = REG(R_EAX);
+	DATA_TYPE rst = lhs OP_SYMBOL (imm + CARRY);
 #ifdef WRITE_BACK
 	REG(R_EAX) = rst;
 #endif
+
+	arithmetic_flags(rst, lhs, OP_SYMBOL(imm + CARRY));
 
 	print_asm(str(OP_NAME) str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(R_EAX));
 	return 1 + DATA_BYTE;
@@ -36,26 +36,26 @@ make_helper(concat(concat(OP_NAME, _rm_r_), SUFFIX)) {
 	DATA_TYPE rst = 0;
 	int len = 1;
 	if(m.mod == 3) {
-		rst = REG(m.R_M) OP_SYMBOL (REG(m.reg) + CARRY);
-
-		arithmetic_flags(rst, REG(m.R_M), OP_SYMBOL(REG(m.reg) + CARRY));
-
+		DATA_TYPE lhs = REG(m.R_M);
+		rst = lhs OP_SYMBOL (REG(m.reg) + CARRY);
 #ifdef WRITE_BACK
 		REG(m.R_M) = rst;
 #endif
+
+		arithmetic_flags(rst, lhs, OP_SYMBOL(REG(m.reg) + CARRY));
 
 		print_asm(str(OP_NAME) str(SUFFIX) " %%%s,%%%s", REG_NAME(m.reg), REG_NAME(m.R_M));
 	}
 	else {
 		swaddr_t addr;
 		len = read_ModR_M(eip + 1, &addr);
-		rst = MEM_R(addr) OP_SYMBOL (REG(m.reg) + CARRY);
-
-		arithmetic_flags(rst, MEM_R(addr), OP_SYMBOL(REG(m.reg) + CARRY));
-
+		DATA_TYPE lhs = MEM_R(addr);
+		rst = lhs OP_SYMBOL (REG(m.reg) + CARRY);
 #ifdef WRITE_BACK
 		MEM_W(addr, rst);
 #endif
+
+		arithmetic_flags(rst, lhs, OP_SYMBOL(REG(m.reg) + CARRY));
 
 		print_asm(str(OP_NAME) str(SUFFIX) " %%%s,%s", REG_NAME(m.reg), ModR_M_asm);
 	}
@@ -66,29 +66,27 @@ make_helper(concat(concat(OP_NAME, _rm_r_), SUFFIX)) {
 make_helper(concat(concat(OP_NAME, _r_rm_), SUFFIX)) {
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);
-	DATA_TYPE rst = 0;
+	DATA_TYPE rst = 0, lhs = REG(m.reg);
 	int len = 1;
 	if(m.mod == 3) {
-		rst = REG(m.reg) OP_SYMBOL (REG(m.R_M) + CARRY);
-
-		arithmetic_flags(rst, REG(m.reg), OP_SYMBOL(REG(m.R_M) + CARRY));
-
+		rst = lhs OP_SYMBOL (REG(m.R_M) + CARRY);
 #ifdef WRITE_BACK
 		REG(m.reg) = rst;
 #endif
+
+		arithmetic_flags(rst, lhs, OP_SYMBOL(REG(m.R_M) + CARRY));
 
 		print_asm(str(OP_NAME) str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
 	}
 	else {
 		swaddr_t addr;
 		len = read_ModR_M(eip + 1, &addr);
-		rst = REG(m.reg) OP_SYMBOL (MEM_R(addr) + CARRY);
-
-		arithmetic_flags(rst, REG(m.reg), OP_SYMBOL(MEM_R(addr) + CARRY));
-
+		rst = lhs OP_SYMBOL (MEM_R(addr) + CARRY);
 #ifdef WRITE_BACK
 		REG(m.reg) = rst;
 #endif
+
+		arithmetic_flags(rst, lhs, OP_SYMBOL(MEM_R(addr) + CARRY));
 
 		print_asm(str(OP_NAME) str(SUFFIX) " %%%s,%s", REG_NAME(m.reg), ModR_M_asm);
 	}

@@ -32,26 +32,26 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 	switch(m.opcode) {
 		case 0: 
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, DATA_BYTE);
-				rst = REG(m.R_M) + imm;
-
-				cpu.eflags.carry_flag = rst < REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), imm);
-
+				rst = lhs + imm;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, imm);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, DATA_BYTE);
-				rst = MEM_R(addr) + imm;
-
-				cpu.eflags.carry_flag = rst < MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), imm);
-
+				rst = lhs + imm;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, imm);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -80,52 +80,52 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 			break;
 		case 2:
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, DATA_BYTE);
-				rst = REG(m.R_M) + imm + cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst < REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), imm + cpu.eflags.carry_flag);
-
+				rst = lhs + imm + cpu.eflags.carry_flag;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, imm + cpu.eflags.carry_flag);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, DATA_BYTE);
-				rst = MEM_R(addr) + imm + cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst < MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), imm + cpu.eflags.carry_flag);
-
+				rst = lhs + imm + cpu.eflags.carry_flag;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, imm + cpu.eflags.carry_flag);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
 			break;
 		case 3:
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, DATA_BYTE);
-				rst = REG(m.R_M) - imm - cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst > REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), - imm - cpu.eflags.carry_flag);
-
+				rst = lhs - imm - cpu.eflags.carry_flag;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - imm - cpu.eflags.carry_flag);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, DATA_BYTE);
-				rst = MEM_R(addr) - imm - cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst > MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), - imm - cpu.eflags.carry_flag);
-
+				rst = lhs - imm - cpu.eflags.carry_flag;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - imm - cpu.eflags.carry_flag);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -154,26 +154,26 @@ make_helper(concat(add_sub_rm_i_, SUFFIX)) {
 			break;
 		case 5:
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, DATA_BYTE);
-				rst = REG(m.R_M) - imm;
-
-				cpu.eflags.carry_flag = rst > REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), - imm);
-
+				rst = lhs - imm;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - imm);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, DATA_BYTE);
-				rst = MEM_R(addr) - imm;
-
-				cpu.eflags.carry_flag = rst > MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), - imm);
-
+				rst = lhs - imm;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - imm);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -240,26 +240,26 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 	switch(m.opcode) {
 		case 0: 
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, 1);
-				rst = REG(m.R_M) + (DATA_TYPE_S)imm;
-
-				cpu.eflags.carry_flag = rst < REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), (DATA_TYPE_S)imm);
-
+				rst = lhs + (DATA_TYPE_S)imm;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, (DATA_TYPE_S)imm);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, 1);
-				rst = MEM_R(addr) + (DATA_TYPE_S)imm;
-
-				cpu.eflags.carry_flag = rst < MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), (DATA_TYPE_S)imm);
-
+				rst = lhs + (DATA_TYPE_S)imm;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, (DATA_TYPE_S)imm);
 
 				print_asm("add" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -288,52 +288,52 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 			break;
 		case 2:
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, 1);
-				rst = REG(m.R_M) + (DATA_TYPE_S)imm + cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst < REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), (DATA_TYPE_S)imm + cpu.eflags.carry_flag);
-
+				rst = lhs + (DATA_TYPE_S)imm + cpu.eflags.carry_flag;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, (DATA_TYPE_S)imm + cpu.eflags.carry_flag);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, 1);
-				rst = MEM_R(addr) + (DATA_TYPE_S)imm + cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst < MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), (DATA_TYPE_S)imm + cpu.eflags.carry_flag);
-
+				rst = lhs + (DATA_TYPE_S)imm + cpu.eflags.carry_flag;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst < lhs;
+				arithmetic_flags(rst, lhs, (DATA_TYPE_S)imm + cpu.eflags.carry_flag);
 
 				print_asm("adc" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
 			break;
 		case 3:
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, 1);
-				rst = REG(m.R_M) - (DATA_TYPE_S)imm - cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst > REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), - (DATA_TYPE_S)imm - cpu.eflags.carry_flag);
-
+				rst = lhs - (DATA_TYPE_S)imm - cpu.eflags.carry_flag;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - (DATA_TYPE_S)imm - cpu.eflags.carry_flag);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, 1);
-				rst = MEM_R(addr) - (DATA_TYPE_S)imm - cpu.eflags.carry_flag;
-
-				cpu.eflags.carry_flag = rst > MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), - (DATA_TYPE_S)imm - cpu.eflags.carry_flag);
-
+				rst = lhs - (DATA_TYPE_S)imm - cpu.eflags.carry_flag;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - (DATA_TYPE_S)imm - cpu.eflags.carry_flag);
 
 				print_asm("sbb" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
@@ -362,26 +362,26 @@ make_helper(concat(add_sub_rm_i8_, SUFFIX)) {
 			break;
 		case 5:
 			if(m.mod == 3) {
+				DATA_TYPE lhs = REG(m.R_M);
 				imm = instr_fetch(eip + 2, 1);
-				rst = REG(m.R_M) - (DATA_TYPE_S)imm;
-
-				cpu.eflags.carry_flag = rst > REG(m.R_M);
-				arithmetic_flags(rst, REG(m.R_M), - (DATA_TYPE_S)imm);
-
+				rst = lhs - (DATA_TYPE_S)imm;
 				REG(m.R_M) = rst;
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - (DATA_TYPE_S)imm);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 			}
 			else {
 				swaddr_t addr;
 				len = read_ModR_M(eip + 1, &addr);
+				DATA_TYPE lhs = MEM_R(addr);
 				imm = instr_fetch(eip + 1 + len, 1);
-				rst = MEM_R(addr) - (DATA_TYPE_S)imm;
-
-				cpu.eflags.carry_flag = rst > MEM_R(addr);
-				arithmetic_flags(rst, MEM_R(addr), - (DATA_TYPE_S)imm);
-
+				rst = lhs - (DATA_TYPE_S)imm;
 				MEM_W(addr, rst);
+
+				cpu.eflags.carry_flag = rst > lhs;
+				arithmetic_flags(rst, lhs, - (DATA_TYPE_S)imm);
 
 				print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 			}
