@@ -117,6 +117,7 @@ void refresh_bp() {
 	BP *trv = head;
 	while(trv) {
 		if(!(trv->watch)) {
+			trv->replaced = swaddr_read(trv->address, 1);
 			swaddr_write(trv->address, 1, INT3_CODE);
 		}
 		trv->hit_time = 0;
