@@ -61,7 +61,7 @@ make_helper(pop_r_l) {
 	}
 	else {
 		reg_l(reg_code) = swaddr_read(reg_l(R_ESP), 4);
-		reg_l(R_ESP) -= 4;
+		reg_l(R_ESP) += 4;
 	}
 
 	print_asm("popl %%%s", regsl[reg_code]);
@@ -76,7 +76,7 @@ make_helper(pop_r_w) {
 	}
 	else {
 		reg_l(reg_code) = swaddr_read(reg_l(R_ESP), 2);
-		reg_l(R_ESP) -= 2;
+		reg_l(R_ESP) += 2;
 	}
 
 	print_asm("popw %%%s", regsw[reg_code]);
