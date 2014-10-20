@@ -17,8 +17,8 @@ make_helper(concat(inc_r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
 	DATA_TYPE rst = ++ REG(reg_code);
 
-	inc_dec_flags(rst, -);
 	cpu.eflags.carry_flag = (DATA_TYPE)(rst) < (DATA_TYPE)(rst - 1);
+	inc_dec_flags(rst, -);
 
 	print_asm("inc %%%s", REG_NAME(reg_code));
 	return 1;
@@ -28,8 +28,8 @@ make_helper(concat(dec_r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
 	DATA_TYPE rst = -- REG(reg_code);
 
-	inc_dec_flags(rst, +);
 	cpu.eflags.carry_flag = (DATA_TYPE)(rst) > (DATA_TYPE)(rst + 1);
+	inc_dec_flags(rst, +);
 
 	print_asm("dec %%%s", REG_NAME(reg_code));
 	return 1;

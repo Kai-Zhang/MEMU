@@ -7,7 +7,6 @@
 	cpu.eflags.sign_flag = ((DATA_TYPE_S)(rst) < 0); \
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.auxiliary_flag = ((rst) ^ (rst op 1)) >> 4; \
-	cpu.eflags.carry_flag = ((DATA_TYPE)(rst) < (DATA_TYPE)(rst op 1)); \
 	cpu.eflags.overflow_flag = ((DATA_TYPE_S)(rst op 1) >= 0) && ((DATA_TYPE_S)(rst) >= 0); \
 	cpu.eflags.parity_flag = 0; \
 	while (rst) { \
@@ -24,7 +23,8 @@ make_helper(concat(push_m_, SUFFIX)) {
 			if(m.mod == 3) {
 				DATA_TYPE rst = ++ REG(m.R_M);
 
-				inc_dec_flags(rst, +);
+				cpu.eflags.carry_flag = ((DATA_TYPE)(rst) < (DATA_TYPE)(rst - 1));
+				inc_dec_flags(rst, -);
 
 				print_asm("inc %%%s", REG_NAME(m.R_M));
 			}
@@ -34,6 +34,7 @@ make_helper(concat(push_m_, SUFFIX)) {
 				DATA_TYPE rst = MEM_R(addr) + 1;
 				MEM_W(addr, rst);
 
+				cpu.eflags.carry_flag = ((DATA_TYPE)(rst) < (DATA_TYPE)(rst - 1));
 				inc_dec_flags(rst, +);
 
 				print_asm("inc %s", ModR_M_asm);
@@ -43,7 +44,8 @@ make_helper(concat(push_m_, SUFFIX)) {
 			if(m.mod == 3) {
 				DATA_TYPE rst = -- REG(m.R_M);
 
-				inc_dec_flags(rst, -);
+				cpu.eflags.carry_flag = ((DATA_TYPE)(rst) < (DATA_TYPE)(rst - 1));
+				inc_dec_flags(rst, +);
 
 				print_asm("dec %%%s", REG_NAME(m.R_M));
 			}
@@ -53,7 +55,8 @@ make_helper(concat(push_m_, SUFFIX)) {
 				DATA_TYPE rst = MEM_R(addr) - 1;
 				MEM_W(addr, rst);
 
-				inc_dec_flags(rst, -);
+				cpu.eflags.carry_flag = ((DATA_TYPE)(rst) < (DATA_TYPE)(rst - 1));
+				inc_dec_flags(rst, +);
 
 				print_asm("dec %s", ModR_M_asm);
 			}
