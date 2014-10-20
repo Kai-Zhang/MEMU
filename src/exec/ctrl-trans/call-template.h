@@ -5,7 +5,7 @@
 make_helper(concat(call_rel_, SUFFIX)) {
 	DATA_TYPE_S offset = instr_fetch(eip + 1, DATA_BYTE);
 	reg_l(R_ESP) -= DATA_BYTE;
-	MEM_W(reg_w(R_ESP), cpu.eip);
+	MEM_W(reg_l(R_ESP), cpu.eip);
 
 	cpu.eip += offset;
 #if DATA_BYTE == 2
