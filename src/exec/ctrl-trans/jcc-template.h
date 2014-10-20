@@ -4,9 +4,9 @@
 make_helper(concat(concat(concat(j, CC), _), SUFFIX)) {
 	DATA_TYPE_S offset = instr_fetch(eip + 1, DATA_BYTE);
 	swaddr_t eip_temp = cpu.eip;
-	cpu.eip += (int32_t)offset;
+	eip_temp += (int32_t)offset;
 #if DATA_BYTE == 2
-	cpu.eip &= 0xffff;
+	eip_temp &= 0xffff;
 #endif
 	if (COND) {
 		cpu.eip = eip_temp;
