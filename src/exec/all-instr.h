@@ -13,6 +13,7 @@
 #include "logical/setcc.h"
 #include "logical/test.h"
 #include "ctrl-trans/jcc.h"
+#include "ctrl-trans/jmp.h"
 #include "flag-ctrl/flag.h"
 
 #include "misc/misc.h"

@@ -6,6 +6,9 @@ make_helper(concat(concat(concat(j, CC), _), SUFFIX)) {
 	if (COND) {
 		offset = instr_fetch(eip + 1, DATA_BYTE);
 		cpu.eip += (int32_t)offset;
+#if DATA_BYTE == 2
+		cpu.eip &= 0xffff;
+#endif
 	}
 
 	print_asm("j" str(CC) " %x", eip + 1 + DATA_BYTE + offset);

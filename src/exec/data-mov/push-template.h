@@ -58,6 +58,31 @@ make_helper(concat(push_m_, SUFFIX)) {
 				print_asm("dec %s", ModR_M_asm);
 			}
 			break;
+#if DATA_BYTE != 1
+		case 4:
+			if(m.mod == 3) {
+#if DATA_BYTE == 2
+				cpu.eip = (REG(m.R_M) & 0xffff) - (1 + len);
+#else
+				cpu.eip = REG(m.R_M) - (1 + len);
+#endif
+
+				print_asm("jmp %%%s", REG_NAME(m.R_M));
+			}
+			else {
+				swaddr_t addr;
+				len = read_ModR_M(eip + 1, &addr);
+				cpu.eip += (int32_t)(DATA_TYPE_S)MEM_R(addr);
+#if DATA_BYTE == 2
+				cpu.eip = (MEM_R(addr) & 0xffff) - (1 + len);
+#else
+				cpu.eip = MEM_R(addr) - (1 + len);
+#endif
+
+				print_asm("jmp %s", ModR_M_asm);
+			}
+			break;
+#endif
 		case 6:
 			assert(m.mod == 3);
 			swaddr_t addr;
@@ -72,7 +97,7 @@ make_helper(concat(push_m_, SUFFIX)) {
 			}
 			break;
 		default:
-			printf("invalid `push'(eip = 0x%08x): unexpected reg/op %d\n", eip, m.reg);
+			printf("invalid operator(eip = 0x%08x): unexpected reg/op %d\n", eip, m.reg);
 			assert(0);
 	}
 
