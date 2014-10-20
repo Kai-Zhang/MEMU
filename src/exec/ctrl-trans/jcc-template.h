@@ -3,7 +3,6 @@
 
 make_helper(concat(concat(concat(j, CC), _), SUFFIX)) {
 	DATA_TYPE_S offset = instr_fetch(eip + 1, DATA_BYTE);
-	printf(str(COND));
 	if (COND) {
 		cpu.eip += (int32_t)offset;
 #if DATA_BYTE == 2
