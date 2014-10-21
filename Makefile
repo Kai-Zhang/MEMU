@@ -38,6 +38,9 @@ loader: $(TESTFILE)
 run: nemu
 	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
 
+play: nemu
+	./nemu -dq $(TESTFILE) 2>&1 | tee log.txt
+
 gdb: nemu
 	gdb --args ./nemu -dq $(TESTFILE)
 
