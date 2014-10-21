@@ -39,7 +39,7 @@ make_helper(concat(test_rm_i_, SUFFIX)) {
 	DATA_TYPE imm = 0;
 	DATA_TYPE_S rst = 0;
 	int len = 1;
-	switch(m.opcode == 0) {
+	switch(m.opcode) {
 		case 0:
 			if(m.mod == 3) {
 				imm = instr_fetch(eip + 2, DATA_BYTE);
