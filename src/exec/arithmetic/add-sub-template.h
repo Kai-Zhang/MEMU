@@ -88,7 +88,7 @@ make_helper(concat(concat(OP_NAME, _r_rm_), SUFFIX)) {
 
 		arithmetic_flags(rst, lhs, OP_SYMBOL(MEM_R(addr) + CARRY));
 
-		print_asm(str(OP_NAME) str(SUFFIX) " %%%s,%s", REG_NAME(m.reg), ModR_M_asm);
+		print_asm(str(OP_NAME) str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
 	}
 	
 	return 1 + len;
