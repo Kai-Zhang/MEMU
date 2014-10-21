@@ -56,7 +56,7 @@ helper_fun opcode_table [256] = {
 /* 0xb4 */	mov_i2r_b, mov_i2r_b, mov_i2r_b, mov_i2r_b,
 /* 0xb8 */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
 /* 0xbc */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
-/* 0xc0 */	shift_rm_i8_b, shift_rm_i8_v, inv, ret,
+/* 0xc0 */	shift_rm_i8_b, shift_rm_i8_v, ret_i, ret,
 /* 0xc4 */	inv, inv, mov_i2rm_b, mov_i2rm_v,
 /* 0xc8 */	inv, leave, inv, inv,
 /* 0xcc */	int3, inv, inv, inv,
