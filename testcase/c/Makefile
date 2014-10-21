@@ -1,6 +1,6 @@
 CC      = gcc
 LD		= ld
-CFLAGS  = -m32 -Wall -Werror -static -I..
+CFLAGS  = -m32 -Wall -Werror -static -I.. -O2
 LDFLAGS = -melf_i386 -e main -T ../link.lds
 
 SRCS = $(shell ls *.c)
