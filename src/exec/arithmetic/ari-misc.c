@@ -8,7 +8,7 @@
 #include "ari-misc-template.h"
 #undef DATA_BYTE
 
-#define inc_dec_flags(rst, op) \
+#define inc_dec_flags(rst, op); \
 	cpu.eflags.sign_flag = ((int8_t)(rst) < 0); \
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.auxiliary_flag = ((rst) ^ (rst op 1)) >> 4; \

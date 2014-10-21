@@ -2,7 +2,7 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
-#define inc_dec_flags(rst, op) \
+#define inc_dec_flags(rst, op); \
 	cpu.eflags.sign_flag = ((DATA_TYPE_S)(rst) < 0); \
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.auxiliary_flag = ((rst) ^ (rst op 1)) >> 4; \

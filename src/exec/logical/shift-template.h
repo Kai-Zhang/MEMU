@@ -2,7 +2,7 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
-#define logical_flags(rst) \
+#define logical_flags(rst); \
 	cpu.eflags.sign_flag = ((DATA_TYPE_S)(rst) < 0); \
 	cpu.eflags.zero_flag = ((rst) == 0); \
 	cpu.eflags.parity_flag = 0; \
