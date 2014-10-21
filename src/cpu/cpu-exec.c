@@ -68,7 +68,7 @@ void cpu_exec(volatile uint32_t n) {
 		case END:	return;
 		case RUNNING:
 			if(hit_bp) {
-				swaddr_write(cpu.eip - instr_len, 1, INT3_CODE);
+				swaddr_write(eip_temp, 1, INT3_CODE);
 				hit_bp = false;
 			}
 		}
