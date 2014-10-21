@@ -128,13 +128,14 @@ make_helper(concat(push_m_, SUFFIX)) {
 				reg_l(R_ESP) -= DATA_BYTE;
 				MEM_W(reg_l(R_ESP), MEM_R(addr));
 			}
+
+			print_asm("push" str(SUFFIX) " %s", ModR_M_asm);
 			break;
 		default:
 			printf("invalid operator(eip = 0x%08x): unexpected reg/op %d\n", eip, m.reg);
 			assert(0);
 	}
 
-	print_asm("push" str(SUFFIX) " %s", ModR_M_asm);
 	return 1 + len;
 }
 
