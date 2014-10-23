@@ -245,7 +245,7 @@ static void cmd_bt() {
 	int t = func_stack.top;
 	for(; t >= 0; --t) {
 		printf("#%d\t0x%08x in func:%s\n",
-				func_stack.top - t, func_stack.fstack[t], func_name(current_func(func_stack.fstack[t])));
+				func_stack.top - t + 1, func_stack.fstack[t], func_name(current_func(func_stack.fstack[t])));
 	}
 }
 

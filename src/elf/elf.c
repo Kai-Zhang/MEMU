@@ -12,6 +12,9 @@ static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
 
+uint8_t *loader;
+uint32_t loader_len;
+
 void set_main_args(int argc, char *argv[]) {
 	main_argc = argc;
 	main_argv = argv;
@@ -99,6 +102,8 @@ void load_prog() {
 	 * memory).
 	 */
 	fread(hwa_to_va(0), st.st_size, 1, fp);
+	loader = hwa_to_va(0);
+	loader_len = st.st_size;
 	fclose(fp);
 }
 
