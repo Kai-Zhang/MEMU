@@ -9,8 +9,10 @@
 #include <sys/types.h>
 #include <regex.h>
 
+extern swaddr_t find_var(char *);
+
 enum {
-	NOTYPE = 256, NUM, HEX, REG, LE, GE, EQ, NEQ, AND, OR, NOT, SHL, SHR,
+	NOTYPE = 256, NUM, HEX, REG, VAR, LE, GE, EQ, NEQ, AND, OR, NOT, SHL, SHR,
 	BAND, BOR, XOR, BNOT, DEREF, NEG, POS
 	/* TODO: Add more token types */
 
@@ -50,7 +52,8 @@ static struct rule {
 	{"\\)",		')'},				// right parenthese
 	{"0x[0-9A-Fa-f]+",	HEX},		// hexadecimal number
 	{"[[:digit:]]+",	NUM},		// decimal number
-	{"\\$[[:alpha:]]+",	REG}		// register
+	{"\\$[[:alpha:]]+",	REG},		// register
+	{"[[:alpha:]][[:alpha:][:digit:]_]*",	VAR}	// variable
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -124,6 +127,12 @@ static bool make_token(char *e) {
 									tokens[nr_token].str[trv-1] = substr_start[trv];
 								}
 								tokens[nr_token].str[trv-1] = 0;	break;
+					case VAR:	while(((substr_start[trv] >= 'a' && substr_start[trv] <= 'z') ||
+										(substr_start[trv] >= 'A' && substr_start[trv] <= 'Z') ||
+										(substr_start[trv] >= '0' && substr_start[trv] <= '9') || substr_start[trv] == '_') && trv < 32) {
+									tokens[nr_token].str[trv] = substr_start[trv]; ++trv;
+								}
+								tokens[nr_token].str[trv] = 0;		break;
 					//default: assert(0);
 				}
 				tokens[nr_token].type = rules[i].token_type;
@@ -225,6 +234,12 @@ uint32_t eval(int start, int end, bool *success) {
 						if(strcasecmp("eflags", tokens[start].str) == 0)
 							return cpu.eflags.value;
 						*success = false;	return 0;
+			case VAR:	*success = true;
+						swaddr_t var_addr = find_var(tokens[start].str);
+						if(var_addr != 0) {
+							return var_addr;
+						}
+						*success = false;	return 0;
 			default:	*success = false;	return 0;
 		}
 	} else if(check_parenthese(start, end)) {
@@ -285,7 +300,8 @@ uint32_t expr_calc(char *e, bool *success) {
 
 	int i = 0;
 	for (; i < nr_token-1; ++i) {
-		if(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != NUM && tokens[i-1].type != HEX && tokens[i-1].type != REG)) {
+		if(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != NUM && tokens[i-1].type != HEX
+				&& tokens[i-1].type != REG && tokens[i-1].type != VAR)) {
 			switch(tokens[i].type) {
 				case '*':	tokens[i].type = DEREF;		break;
 				case '+':	tokens[i].type = POS;		break;
