@@ -237,6 +237,10 @@ static void cmd_w(char *expr) {
 }
 
 static void cmd_bt() {
+	if(!cpu.eip) {
+		puts("No stack.");
+		return;
+	}
 	printf("#0\tfunc:%s\n", func_name(cpu.eip));
 	int t = func_stack.top;
 	for(; t >= 0; --t) {
