@@ -114,3 +114,28 @@ swaddr_t find_var(char *symbol) {
 	}
 	return 0;
 }
+
+swaddr_t current_func(swaddr_t addr) {
+	int i = 0;
+	for (; i < nr_symtab_entry; ++i) {
+		if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC) {
+			if((addr >= symtab[i].st_value) && (addr <= symtab[i].st_value + symtab[i].st_size)) {
+				return symtab[i].st_value;
+			}
+		}
+	}
+	return 0;
+}
+
+char *func_name(swaddr_t func) {
+	assert(func != 0);
+	int i = 0;
+	for (; i < nr_symtab_entry; ++i) {
+		if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC) {
+			if(func == symtab[i].st_value) {
+				return strtab + symtab[i].st_name;
+			}
+		}
+	}
+	return 0;
+}

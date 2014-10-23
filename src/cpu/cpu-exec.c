@@ -1,5 +1,6 @@
 #include "ui/ui.h"
 #include "ui/breakpoint.h"
+#include "exec/func-stack.h"
 
 #include "nemu.h"
 
@@ -32,6 +33,7 @@ void restart() {
 	init_dram();
 
 	refresh_bp();
+	func_stack.top = -1;
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {

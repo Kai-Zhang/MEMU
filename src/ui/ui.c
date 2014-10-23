@@ -1,5 +1,6 @@
 #include "ui/ui.h"
 #include "ui/breakpoint.h"
+#include "exec/func-stack.h"
 
 #include "nemu.h"
 
@@ -10,6 +11,8 @@
 #include <readline/history.h>
 
 int nemu_state = END;
+
+struct frame_stack func_stack;
 
 void cpu_exec(uint32_t);
 void restart();
@@ -233,6 +236,15 @@ static void cmd_w(char *expr) {
 	newbp->watch_expr = watch;
 }
 
+static void cmd_bt() {
+	printf("#0\tfunc:%s\n", func_name(cpu.eip));
+	int t = func_stack.top;
+	for(; t >= 0; --t) {
+		printf("#%d\t0x%08x in func:%s\n",
+				func_stack.top - t, func_stack.fstack[t], func_name(current_func(func_stack.fstack[t])));
+	}
+}
+
 void main_loop() {
 	char *cmd;
 	while(1) {
@@ -278,6 +290,9 @@ void main_loop() {
 		else if(strcmp(p, "w") == 0) {
 			char *expr = strtok(NULL, "\0");
 			cmd_w(expr);
+		}
+		else if(strcmp(p, "bt") == 0) {
+			cmd_bt();
 		}
 
 
