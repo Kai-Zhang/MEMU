@@ -6,8 +6,6 @@
 
 #include <setjmp.h>
 
-#define LOADER_START 0x100000
-
 int exec(swaddr_t);
 void load_prog();
 void init_dram();
@@ -15,7 +13,7 @@ void init_dram();
 char assembly[40];
 jmp_buf jbuf;	/* Make it easy to perform exception handling */
 
-extern uint8_t *loader;
+extern uint32_t loader_offset;
 extern uint32_t loader_len;
 
 extern int quiet;
@@ -23,7 +21,7 @@ extern int quiet;
 void restart() {
 	/* Perform some initialization to restart a program */
 	load_prog();
-	memcpy(hwa_to_va(LOADER_START), loader, loader_len);
+//	memcpy(hwa_to_va(LOADER_START), loader, loader_len);
 
 	cpu.eip = LOADER_START;
 	cpu.ebp = 0x0;
