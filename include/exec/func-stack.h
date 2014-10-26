@@ -3,7 +3,7 @@
 #include "common.h"
 
 struct frame_stack {
-	swaddr_t fstack[256 * 8];
+	swaddr_t fstack[8 * 1024];
 	int top;
 };
 
