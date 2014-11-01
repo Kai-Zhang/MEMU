@@ -8,7 +8,8 @@ LD      = ld
 CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -I./include -O2
 
 # jyy always knows what you have done (*^__^*)
-GITFLAGS = -q --author='jyy <njujiangyy@gmail.com>' --no-verify --allow-empty
+# so I change this for my own good :D
+GITFLAGS = -q --author='john <j.zhangkai1994@gmail.com>' --no-verify --allow-empty
 
 # target to compile
 CFILES  = $(shell find src/ -name "*.c")
