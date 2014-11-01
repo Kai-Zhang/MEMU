@@ -30,10 +30,10 @@ memu: $(OBJS)
 $(TEST_FILE_LIST):
 	cd `dirname $@` && make
 
-loader: $(TESTFILE)
-	objcopy -S -O binary $(TESTFILE) loader
-	xxd -i loader > src/elf/loader.c
-	rm loader
+#loader: $(TESTFILE)
+#	objcopy -S -O binary $(TESTFILE) loader
+#	xxd -i loader > src/elf/loader.c
+#	rm loader
 
 
 run: memu
