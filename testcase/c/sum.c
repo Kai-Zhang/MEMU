@@ -7,7 +7,7 @@ int main() {
 		i ++;
 	}
 
-	nemu_assert(sum == 5050);
+	memu_assert(sum == 5050);
 	HIT_GOOD_TRAP;
 
 	return 0;

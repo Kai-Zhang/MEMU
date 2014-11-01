@@ -21,8 +21,8 @@ int main() {
 	struct dummy t = fun(d);
 
 	for(i = 0; i < N; i ++) {
-		nemu_assert(t.pad1[i] == i + 128);
-		nemu_assert(t.pad2[i] == i);
+		memu_assert(t.pad1[i] == i + 128);
+		memu_assert(t.pad2[i] == i);
 	}
 
 	HIT_GOOD_TRAP;

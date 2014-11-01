@@ -112,7 +112,7 @@ void load_prog() {
 	assert(fp);
 
 	/* We do not have a virtual hard disk now. Before we have a virutal hard disk,
-	 * the beginning of physical memory is used as a "disk". The loader in NEMU
+	 * the beginning of physical memory is used as a "disk". The loader in MEMU
 	 * will load the program from this "disk" (at the beginning of the physical
 	 * memory).
 	 */

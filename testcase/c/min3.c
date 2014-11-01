@@ -18,7 +18,7 @@ int main() {
 	for(i = 0; i < NR_DATA; i ++) {
 		for(j = 0; j < NR_DATA; j ++) {
 			for(k = 0; k < NR_DATA; k ++) {
-				nemu_assert(min3(test_data[i], test_data[j], test_data[k]) == ans[ans_idx ++]);
+				memu_assert(min3(test_data[i], test_data[j], test_data[k]) == ans[ans_idx ++]);
 			}
 		}
 	}

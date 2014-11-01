@@ -20,8 +20,8 @@ C_TEST_FILE_LIST = $(shell find testcase/c/ -name "*.c")
 S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
 TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
-nemu: $(OBJS)
-	$(CC) -o nemu $(OBJS) $(CFLAGS) -lreadline
+memu: $(OBJS)
+	$(CC) -o memu $(OBJS) $(CFLAGS) -lreadline
 	-@git add -A --ignore-errors # KEEP IT
 	-@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
 	-@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT
@@ -35,16 +35,16 @@ loader: $(TESTFILE)
 	rm loader
 
 
-run: nemu
-	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
+run: memu
+	./memu -d $(TESTFILE) 2>&1 | tee log.txt
 
-play: nemu
-	./nemu -dq $(TESTFILE) 2>&1 | tee log.txt
+play: memu
+	./memu -dq $(TESTFILE) 2>&1 | tee log.txt
 
-gdb: nemu
-	gdb --args ./nemu -dq $(TESTFILE)
+gdb: memu
+	gdb --args ./memu -dq $(TESTFILE)
 
-test: nemu $(TEST_FILE_LIST)
+test: memu $(TEST_FILE_LIST)
 	bash test.sh $(TEST_FILE_LIST)
 
 
@@ -59,4 +59,4 @@ submit: clean
 -include $(OBJS:.o=.d)
 
 clean:
-	-rm -f nemu $(OBJS) $(OBJS:.o=.d) log.txt 2> /dev/null
+	-rm -f memu $(OBJS) $(OBJS:.o=.d) log.txt 2> /dev/null

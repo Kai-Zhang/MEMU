@@ -2,7 +2,7 @@
 
 #include "exec/helper.h"
 
-#include "nemu.h"
+#include "memu.h"
 
 char ModR_M_asm[MODRM_ASM_BUF_SIZE];
 #define print_ModR_M_asm(...) \

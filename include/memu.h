@@ -1,5 +1,5 @@
-#ifndef __NEMU_H__
-#define __NEMU_H__
+#ifndef __MEMU_H__
+#define __MEMU_H__
 
 #include "common.h"
 #include "memory.h"

@@ -2,7 +2,7 @@
 #include "ui/breakpoint.h"
 #include "exec/func-stack.h"
 
-#include "nemu.h"
+#include "memu.h"
 
 #include <setjmp.h>
 
@@ -58,11 +58,11 @@ void cpu_exec(volatile uint32_t n) {
 			puts(assembly);
 		}
 
-		if(check_watchpoint() && nemu_state != BREAK) {
+		if(check_watchpoint() && memu_state != BREAK) {
 			return;
 		}
 
-		switch(nemu_state) {
+		switch(memu_state) {
 		case INT:	printf("\n\nUser interrupt\n");	return;
 		case BREAK:	instr_recover(--cpu.eip);		return;
 		case END:	return;

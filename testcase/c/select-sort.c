@@ -25,13 +25,13 @@ int main() {
 
 	int i;
 	for(i = 0; i < N; i ++) {
-		nemu_assert(a[i] == i);
+		memu_assert(a[i] == i);
 	}
 
 	select_sort();
 
 	for(i = 0; i < N; i ++) {
-		nemu_assert(a[i] == i);
+		memu_assert(a[i] == i);
 	}
 
 	HIT_GOOD_TRAP;

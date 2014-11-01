@@ -2,7 +2,7 @@
 #include "ui/breakpoint.h"
 #include "exec/func-stack.h"
 
-#include "nemu.h"
+#include "memu.h"
 
 #include <signal.h>
 #include <stdlib.h>
@@ -10,7 +10,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int nemu_state = END;
+int memu_state = END;
 
 struct frame_stack func_stack;
 
@@ -27,7 +27,7 @@ char* rl_gets() {
 		line_read = NULL;
 	}
 
-	line_read = readline("(nemu) ");
+	line_read = readline("(memu) ");
 
 	if (line_read && *line_read) {
 		add_history(line_read);
@@ -41,8 +41,8 @@ char* rl_gets() {
  * search for "Unix signal" in the Internet.
  */
 static void control_C(int signum) {
-	if(nemu_state == RUNNING) {
-		nemu_state = INT;
+	if(memu_state == RUNNING) {
+		memu_state = INT;
 	}
 }
 
@@ -56,18 +56,18 @@ void init_signal() {
 }
 
 static void cmd_c() {
-	if(nemu_state == END) {
+	if(memu_state == END) {
 		puts("The Program does not start. Use 'r' command to start the program.");
 		return;
 	}
 
-	nemu_state = RUNNING;
+	memu_state = RUNNING;
 	cpu_exec(-1);
-	if(nemu_state != END) { nemu_state = STOP; }
+	if(memu_state != END) { memu_state = STOP; }
 }
 
 static void cmd_r() {
-	if(nemu_state != END) { 
+	if(memu_state != END) { 
 		char c;
 		while(1) {
 			printf("The program is already running. Restart the program? (y or n)");
@@ -83,19 +83,19 @@ static void cmd_r() {
 
 restart_:
 	restart();
-	nemu_state = STOP;
+	memu_state = STOP;
 	cmd_c();
 }
 
 static void cmd_si(int step) {
-	if(nemu_state == END) {
+	if(memu_state == END) {
 		restart();
 	}
 
-	nemu_state = RUNNING;
+	memu_state = RUNNING;
 	cpu_exec(step);
-	if(nemu_state != END) {
-		nemu_state = STOP;
+	if(memu_state != END) {
+		memu_state = STOP;
 	}
 }
 

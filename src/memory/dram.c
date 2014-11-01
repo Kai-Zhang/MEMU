@@ -1,7 +1,7 @@
 #include "common.h"
 #include "lib/misc.h"
 
-/* Simulate the (main) behavor of DRAM. Although this will lower the performace of NEMU,
+/* Simulate the (main) behavor of DRAM. Although this will lower the performace of MEMU.
  * it makes you clear about how DRAM is read/written.
  */
 

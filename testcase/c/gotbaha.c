@@ -27,7 +27,7 @@ int gotbaha(int n) {
 int main() {
 	int n;
 	for(n = 4; n <= 1000; n += 2) {
-		nemu_assert(gotbaha(n) == 1);
+		memu_assert(gotbaha(n) == 1);
 	}
 
 	HIT_GOOD_TRAP;

@@ -315,7 +315,7 @@ int main() {
 			for(k = 0; k < N; k ++) {
 				c[i][j] += a[i][k] * b[k][j];
 			}
-			nemu_assert(c[i][j] == ans[i][j]);
+			memu_assert(c[i][j] == ans[i][j]);
 		}
 	}
 

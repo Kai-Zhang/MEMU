@@ -13,12 +13,12 @@ int main() {
 		}
 		
 		if(sum == n) {
-			nemu_assert(n == ans[k]);
+			memu_assert(n == ans[k]);
 			k ++;
 		}
 	}
 
-	nemu_assert(k == 3);
+	memu_assert(k == 3);
 
 	HIT_GOOD_TRAP;
 

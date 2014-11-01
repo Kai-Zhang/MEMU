@@ -7,7 +7,7 @@ int main() {
 	int i;
 	for(i = 2; i < 40; i ++) {
 		fib[i] = fib[i - 1] + fib[i - 2];
-		nemu_assert(fib[i] == ans[i]);
+		memu_assert(fib[i] == ans[i]);
 	}
 
 	HIT_GOOD_TRAP;

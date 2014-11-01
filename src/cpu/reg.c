@@ -1,4 +1,4 @@
-#include "nemu.h"
+#include "memu.h"
 
 #include <stdlib.h>
 #include <time.h>

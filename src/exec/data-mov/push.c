@@ -1,8 +1,6 @@
 #include "exec/helper.h"
 #include "cpu/modrm.h"
 
-#include "nemu.h"
-
 #define DATA_BYTE 2
 #include "push-template.h"
 #undef DATA_BYTE

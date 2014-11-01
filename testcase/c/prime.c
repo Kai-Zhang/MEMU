@@ -15,12 +15,12 @@ int main() {
 			}
 		}
 		if(prime) {
-			nemu_assert(i == ans[n]);
+			memu_assert(i == ans[n]);
 			n ++;
 		}
 	}
 
-	nemu_assert(n == 21);
+	memu_assert(n == 21);
 
 	HIT_GOOD_TRAP;
 	return 0;

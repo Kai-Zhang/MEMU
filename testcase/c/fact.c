@@ -12,7 +12,7 @@ int main() {
 	int i;
 	for(i = 0; i < 13; i ++) {
 		f[i] = fact(i);
-		nemu_assert(f[i] == ans[i]);
+		memu_assert(f[i] == ans[i]);
 	}
 
 	HIT_GOOD_TRAP;

@@ -1,6 +1,6 @@
 #include "exec/helper.h"
 
-#include "nemu.h"
+#include "memu.h"
 
 int exec(swaddr_t);
 

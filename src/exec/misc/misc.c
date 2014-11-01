@@ -4,7 +4,7 @@
 
 #include "ui/breakpoint.h"
 
-#include "nemu.h"
+#include "memu.h"
 
 #include "escaped_instr.h"
 
@@ -69,18 +69,18 @@ make_helper(escape_code) {
 make_helper(int3) {
 	/* A breakpoint is hit! Do something here! */
 	hit_bp = true;
-	nemu_state = BREAK;
-	printf("\nnemu: Hit Breakpoint %d at 0x%x\n", find_bp(cpu.eip), cpu.eip);
+	memu_state = BREAK;
+	printf("\nmemu: Hit Breakpoint %d at 0x%x\n", find_bp(cpu.eip), cpu.eip);
 
 	++ (get_bp(find_bp(cpu.eip)))->hit_time;
 
 	return 1;
 }
 
-make_helper(nemu_trap) {
-	printf("nemu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
-	nemu_state = END;
+make_helper(memu_trap) {
+	printf("memu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
+	memu_state = END;
 
-	print_asm("nemu trap");
+	print_asm("memu trap");
 	return 1;
 }
