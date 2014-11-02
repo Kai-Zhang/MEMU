@@ -30,11 +30,12 @@ memu: $(OBJS)
 $(TEST_FILE_LIST):
 	cd `dirname $@` && make
 
-#loader: $(TESTFILE)
-#	objcopy -S -O binary $(TESTFILE) loader
-#	xxd -i loader > src/elf/loader.c
-#	rm loader
-
+LOADER_DIR = boot
+loader:
+	cd $(LOADER_DIR) && make
+	objcopy -S -O binary $(LOADER_DIR)/loader loader
+	xxd -i loader > src/elf/loader.c
+	rm loader
 
 run: memu
 	./memu -d $(TESTFILE) 2>&1 | tee log.txt

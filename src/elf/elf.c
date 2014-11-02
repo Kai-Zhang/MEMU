@@ -12,9 +12,6 @@ static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
 
-uint32_t loader_offset;
-uint32_t loader_len;
-
 void set_main_args(int argc, char *argv[]) {
 	main_argc = argc;
 	main_argv = argv;
@@ -82,21 +79,6 @@ void load_table() {
 	free(sh);
 	free(shstrtab);
 
-	/* Load program header table */
-	uint32_t ph_size = elf->e_phentsize * elf->e_phnum;
-	Elf32_Phdr *ph = malloc(ph_size);
-	fseek(fp, elf->e_phoff, SEEK_SET);
-	fread(ph, ph_size, 1, fp);
-
-	for(i = 0; i < elf->e_phnum; i ++) {
-		if(ph[i].p_type == PT_LOAD) {
-			loader_offset = ph[i].p_offset;
-			loader_len = ph[i].p_filesz;
-		}
-	}
-
-	free(ph);
-
 	/* Double check */
 	assert(strtab != NULL && symtab != NULL);
 
@@ -117,7 +99,6 @@ void load_prog() {
 	 * memory).
 	 */
 	fread(hwa_to_va(0), st.st_size, 1, fp);
-	memcpy(hwa_to_va(LOADER_START), hwa_to_va(loader_offset), loader_len);
 
 	fclose(fp);
 }

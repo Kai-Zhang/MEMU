@@ -50,7 +50,7 @@ helper_fun opcode_table [256] = {
 /* 0x9c */	inv, inv, inv, inv, 
 /* 0xa0 */	mov_moffs2a_b, mov_moffs2a_v, mov_a2moffs_b, mov_a2moffs_v,
 /* 0xa4 */	movsb, movs_v, inv, inv,
-/* 0xa8 */	test_a_i_b, test_a_i_v, inv, inv,
+/* 0xa8 */	test_a_i_b, test_a_i_v, stosb, stos_v,
 /* 0xac */	inv, inv, inv, inv,
 /* 0xb0 */	mov_i2r_b, mov_i2r_b, mov_i2r_b, mov_i2r_b,
 /* 0xb4 */	mov_i2r_b, mov_i2r_b, mov_i2r_b, mov_i2r_b,
