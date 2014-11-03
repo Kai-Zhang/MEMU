@@ -10,4 +10,4 @@ loader: $(OBJS) src/start.o
 	ld -o loader -e start -Ttext 0x100000 -m elf_i386 src/start.o $(OBJS)
 
 clean:
-	-rm -f loader $(OBJS) 2> /del/null
+	-rm -f loader src/start.o $(OBJS) 2> /dev/null
