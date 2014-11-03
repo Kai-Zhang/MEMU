@@ -29,3 +29,4 @@ void loader() {
 
 	HIT_GOOD_TRAP;
 }
+
