@@ -20,7 +20,7 @@ void loader() {
 	int i = 0;
 	for(; i < elf->e_phnum; i ++) {
 		if(ph[i].p_type == PT_LOAD) {
-			memcpy((void *)ph[i].p_vaddr, elf + ph[i].p_offset, ph[i].p_filesz);
+			memcpy((void *)ph[i].p_vaddr, (void *)elf + ph[i].p_offset, ph[i].p_filesz);
 			memset((void *)(ph[i].p_vaddr + ph[i].p_filesz), 0, ph[i].p_memsz - ph[i].p_filesz);
 		}
 	}
