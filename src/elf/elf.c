@@ -129,7 +129,10 @@ swaddr_t current_func(swaddr_t addr) {
 }
 
 char *func_name(swaddr_t func) {
-	assert(func != 0);
+	if (!func) {
+		return "loader";
+	}
+//	assert(func != 0);
 	int i = 0;
 	for (; i < nr_symtab_entry; ++i) {
 		if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC) {
