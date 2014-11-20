@@ -167,8 +167,8 @@ static void cmd_b(char *expr) {
 	}
 
 	bool valid_expr = true;
-	swaddr_t bp_addr = expr_calc(expr+1, &valid_expr);
-	if(!valid_expr || expr[0] != '*') {
+	swaddr_t bp_addr = expr_calc(expr, &valid_expr);
+	if(!valid_expr) {
 		puts("Invalid expression.");
 		return;
 	}
