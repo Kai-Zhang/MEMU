@@ -132,13 +132,13 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t block_index = addr & CACHE_MASK;
 
-	if (block_index + len > CACHE_BLOCK) {
+/*	if (block_index + len > CACHE_BLOCK) {
 		size_t rest = CACHE_BLOCK - block_index;
 		uint32_t highbit = cache_read((addr | CACHE_MASK) + 1, len - rest);
 		uint32_t lowbit = cache_read(addr, rest);
 		return (highbit << (1 << rest)) | lowbit;
 	}
-
+*/
 	uint32_t cache_addr = addr >> (CACHE_BLOCK_BIT + CACHE_SIZE_BIT);
 	uint32_t set_index = cache_addr % ((1 << (CACHE_SIZE_BIT - CACHE_BLOCK_BIT)) / SET_NUM);
 	uint32_t tag = cache_addr / ((1 << (CACHE_SIZE_BIT - CACHE_BLOCK_BIT)) / SET_NUM);
