@@ -63,6 +63,7 @@ extern uint32_t dram_read(hwaddr_t, size_t);
 
 #define CACHE_BLOCK (1 << CACHE_BLOCK_BIT)
 #define CACHE_SIZE (1 << CACHE_SIZE_BIT)
+#define CACHE_LINE (1 << (CACHE_SIZE_BIT - CACHE_BLOCK_BIT))
 #define CACHE_MASK (CACHE_BLOCK - 1)
 
 struct cache_block {
@@ -77,7 +78,7 @@ struct cache_block {
 	uint8_t blocks[CACHE_BLOCK];
 };
 
-static struct cache_block cache[1 << (CACHE_SIZE_BIT - CACHE_BLOCK_BIT)][SET_NUM];
+static struct cache_block cache[CACHE_LINE][SET_NUM];
 
 static void block_replace(hwaddr_t addr, uint32_t set_index, uint32_t block_index) {
 	int i = 0;
@@ -120,7 +121,7 @@ static uint32_t LRU_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
 	return cache[set_index][least_used].blocks[addr & CACHE_MASK];
 }
 #else
-static uint32_t random_replace(addr, set_index, tag) {
+static uint32_t random_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
 	int randindex = rand() % SET_NUM;
 	cache[set_index][randindex].tag = tag;
 	block_replace(addr, set_index, randindex);
@@ -128,20 +129,36 @@ static uint32_t random_replace(addr, set_index, tag) {
 }
 #endif
 
+void init_cache(void) {
+	int i = 0, j = 0;
+	for ( ; i < CACHE_LINE; ++ i ) {
+		for ( j = 0; j < SET_NUM; ++ j ) {
+			cache[i][j].valid = false;
+#ifdef WRITE_BACK
+			cache[i][j].dirty = false;
+#endif
+#ifdef LRU_REPLACE
+			cache[i][j].LRUtag = 0;
+#endif
+		}
+	}
+
+	// Cache L2 init
+}
 uint32_t cache_read(hwaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t block_index = addr & CACHE_MASK;
 
-/*	if (block_index + len > CACHE_BLOCK) {
+	if (block_index + len > CACHE_BLOCK) {
 		size_t rest = CACHE_BLOCK - block_index;
 		uint32_t highbit = cache_read((addr | CACHE_MASK) + 1, len - rest);
 		uint32_t lowbit = cache_read(addr, rest);
 		return (highbit << (1 << rest)) | lowbit;
 	}
-*/
+
 	uint32_t cache_addr = addr >> (CACHE_BLOCK_BIT + CACHE_SIZE_BIT);
-	uint32_t set_index = cache_addr % ((1 << (CACHE_SIZE_BIT - CACHE_BLOCK_BIT)) / SET_NUM);
-	uint32_t tag = cache_addr / ((1 << (CACHE_SIZE_BIT - CACHE_BLOCK_BIT)) / SET_NUM);
+	uint32_t set_index = cache_addr % (CACHE_LINE / SET_NUM);
+	uint32_t tag = cache_addr / (CACHE_LINE / SET_NUM);
 
 	int i = 0;
 	for ( ; i < SET_NUM; ++ i ) {
@@ -163,9 +180,9 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
 	}
 
 #ifdef LRU_REPLACE
-	return LRU_replace(set_index, tag) & (~0u >> ((4 - len) << 3));
+	return LRU_replace(addr, set_index, tag) & (~0u >> ((4 - len) << 3));
 #else
-	return random_replace(set_index, tag) & (~0u >> ((4 - len) << 3));
+	return random_replace(addr, set_index, tag) & (~0u >> ((4 - len) << 3));
 #endif
 
 }

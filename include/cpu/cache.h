@@ -2,6 +2,7 @@
 #define __CACHE_H__
 #include "common.h"
 
+void init_cache();
 uint32_t cache_read(hwaddr_t, size_t);
 
 #endif

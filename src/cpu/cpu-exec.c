@@ -1,6 +1,7 @@
 #include "ui/ui.h"
 #include "ui/breakpoint.h"
 #include "exec/func-stack.h"
+#include "cpu/cache.h"
 
 #include "memu.h"
 
@@ -27,6 +28,7 @@ void restart() {
 	cpu.eflags.value = 0x202;
 
 	init_dram();
+	init_cache();
 
 	refresh_bp();
 	func_stack.top = -1;
