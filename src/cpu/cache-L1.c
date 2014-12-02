@@ -11,6 +11,7 @@
  */
 #include <stdlib.h>
 #include "common.h"
+#include "lib/misc.h"
 
 /**
  * Configuration
@@ -60,6 +61,7 @@
 
 
 extern uint32_t dram_read(hwaddr_t, size_t);
+extern void dram_write(hwaddr_t, size_t, uint32_t);
 
 #define CACHE_BLOCK (1 << CACHE_BLOCK_BIT)
 #define CACHE_SIZE (1 << CACHE_SIZE_BIT)
@@ -83,7 +85,14 @@ static struct cache_block cache[CACHE_LINE][SET_NUM];
 static void block_replace(hwaddr_t addr, uint32_t set_index, uint32_t block_index) {
 	int i = 0;
 	hwaddr_t block_addr = addr & CACHE_MASK;
-	for ( ; i < CACHE_BLOCK; ++ i ) {
+#ifdef WRITE_BACK
+	if (cache[set_index][block_index].dirty) {
+		for ( ; i < CACHE_BLOCK; ++ i ) {
+			dram_write(addr, 1, cache[set_index][block_index].blocks[i]);
+		}
+	}
+#endif
+	for ( i = 0; i < CACHE_BLOCK; ++ i ) {
 		cache[set_index][block_index].blocks[i] = dram_read(block_addr + i, 1);
 	}
 }
@@ -103,7 +112,7 @@ static void LRU_process(uint32_t set_index, uint32_t block_index) {
 }
 
 static uint32_t LRU_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
-	int least_used = 0;
+	uint32_t least_used = 0;
 	uint32_t least_used_times = cache[set_index][0].LRUtag ++;
 	int block = 1;
 	for ( ; block < SET_NUM; ++ block) {
@@ -118,14 +127,14 @@ static uint32_t LRU_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
 	cache[set_index][least_used].tag = tag;
 	cache[set_index][least_used].LRUtag = 0;
 	block_replace(addr, set_index, least_used);
-	return cache[set_index][least_used].blocks[addr & CACHE_MASK];
+	return least_used;
 }
 #else
 static uint32_t random_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
-	int randindex = rand() % SET_NUM;
+	uint32_t randindex = rand() % SET_NUM;
 	cache[set_index][randindex].tag = tag;
 	block_replace(addr, set_index, randindex);
-	return cache[set_index][randindex].blocks[addr & CACHE_MASK];
+	return randindex;
 }
 #endif
 
@@ -146,7 +155,6 @@ void init_cache(void) {
 	// Cache L2 init
 }
 uint32_t cache_read(hwaddr_t addr, size_t len) {
-	assert(len == 1 || len == 2 || len == 4);
 	uint32_t block_index = addr & CACHE_MASK;
 
 	if (block_index + len > CACHE_BLOCK) {
@@ -162,11 +170,13 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
 
 	int i = 0;
 	for ( ; i < SET_NUM; ++ i ) {
-		if (cache[set_index][i].tag == tag) {
+		if (cache[set_index][i].valid) {
+			if (cache[set_index][i].tag == tag) {
 #ifdef LRU_REPLACE
-			LRU_process(set_index, i);
+				LRU_process(set_index, i);
 #endif
-			return *(uint32_t*)(&cache[set_index][i].blocks[block_index]) & (~0u >> ((4 - len) << 3));
+				return *(uint32_t*)(&cache[set_index][i].blocks[block_index]) & (~0u >> ((4 - len) << 3));
+			}
 		}
 		else {
 			cache[set_index][i].valid = true;
@@ -180,10 +190,70 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
 	}
 
 #ifdef LRU_REPLACE
-	return LRU_replace(addr, set_index, tag) & (~0u >> ((4 - len) << 3));
+	return cache[set_index][LRU_replace(addr, set_index, tag)].blocks[block_index] & (~0u >> ((4 - len) << 3));
 #else
-	return random_replace(addr, set_index, tag) & (~0u >> ((4 - len) << 3));
+	return cache[set_index][random_replace(addr, set_index, tag)].blocks[block_index] & (~0u >> ((4 - len) << 3));
 #endif
 
 }
 
+void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
+	uint32_t block_index = addr & CACHE_MASK;
+
+	if (block_index + len > CACHE_BLOCK) {
+		size_t rest = CACHE_BLOCK - block_index;
+		cache_write(addr, rest, data);
+		cache_write((addr | CACHE_MASK) + 1, len - rest, data >> (1 << rest));
+		return;
+	}
+
+	uint32_t cache_addr = addr >> (CACHE_BLOCK_BIT + CACHE_SIZE_BIT);
+	uint32_t set_index = cache_addr % (CACHE_LINE / SET_NUM);
+	uint32_t tag = cache_addr / (CACHE_LINE / SET_NUM);
+
+	int i = 0;
+	for ( ; i < SET_NUM; ++ i ) {
+		if (cache[set_index][i].valid) {
+			if (cache[set_index][i].tag == tag) {
+				uint8_t data_buf[2 * CACHE_BLOCK];
+				uint8_t mask[2 * CACHE_BLOCK] = {0};
+#ifdef LRU_REPLACE
+				LRU_process(set_index, i);
+#endif
+#ifdef WRITE_BACK
+				cache[set_index][i].dirty = true;
+				*(uint32_t *)(data_buf + block_index) = data;
+				memset(mask + block_index, 1, len);
+				memcpy_with_mask(cache[set_index][i].blocks, data_buf, CACHE_BLOCK, mask);
+#else	// Write through to cache L2
+				dram_write(addr, len, data);
+				*(uint32_t *)(data_buf + block_index) = data;
+				memset(mask + block_index, 1, len);
+				memcpy_with_mask(cache[set_index][i].blocks, data_buf, CACHE_BLOCK, mask);
+#endif
+				return;
+			}
+		}
+		else {
+			dram_write(addr, len, data);
+#ifdef WRITE_ALLOCATE
+			cache[set_index][i].valid = true;
+			cache[set_index][i].tag = tag;
+			block_replace(addr, set_index, i);
+#ifdef LRU_REPLACE
+			LRU_process(set_index, i);
+#endif
+#endif
+			return;
+		}
+	}
+	dram_write(addr, len, data);
+#ifdef WRITE_ALLOCATE
+#ifdef LRU_REPLACE
+	LRU_replace(addr, set_index, tag);
+#else
+	random_replace(addr, set_index, tag);
+#endif
+#endif
+
+}
