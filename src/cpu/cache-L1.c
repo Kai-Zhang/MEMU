@@ -129,6 +129,10 @@ static uint32_t LRU_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
 			++ cache[set_index][block].LRUtag;
 		}
 	}
+	cache[set_index][least_used].valid = true;
+#ifdef WRITE_BACK
+	cache[set_index][least_used].dirty = false;
+#endif
 	cache[set_index][least_used].tag = tag;
 	cache[set_index][least_used].LRUtag = 0;
 	block_replace(addr, set_index, least_used);
@@ -137,6 +141,10 @@ static uint32_t LRU_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
 #else
 static uint32_t random_replace(hwaddr_t addr, uint32_t set_index, uint32_t tag) {
 	uint32_t randindex = rand() % SET_NUM;
+	cache[set_index][randindex].valid = true;
+#ifdef WRITE_BACK
+	cache[set_index][randindex].dirty = false;
+#endif
 	cache[set_index][randindex].tag = tag;
 	block_replace(addr, set_index, randindex);
 	return randindex;
