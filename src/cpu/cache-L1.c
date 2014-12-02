@@ -8,6 +8,7 @@
  * +  replace: RANDOM_REPLACE, LRU_REPLACE
  * +  write policy: WRITE_BACK, WRITE_THROUGH
  * +  write miss: WRITE_ALLOCATE, NON_WRITE_ALLOCATE
+ * TODO: Only support set associative for now..
  */
 #include <stdlib.h>
 #include "common.h"
@@ -62,6 +63,10 @@
 
 extern uint32_t dram_read(hwaddr_t, size_t);
 extern void dram_write(hwaddr_t, size_t, uint32_t);
+
+// extern void init_cache_L2();
+// extern uint32_t cache_L2_read(hwaddr_t, size_t);
+// extern uint32_t cache_L2_write(hwaddr_t, size_t);
 
 #define CACHE_BLOCK (1 << CACHE_BLOCK_BIT)
 #define CACHE_SIZE (1 << CACHE_SIZE_BIT)
