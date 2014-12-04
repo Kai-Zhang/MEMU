@@ -94,7 +94,7 @@ static void concat(init_, CACHE_NAME)() {
 	}
 }
 
-static void concat(CACHE_NAME, _random_replace)(uint32_t set, int way, uint32_t tag) {
+static void concat(CACHE_NAME, _replace)(uint32_t set, int way, uint32_t tag) {
 	cache_addr temp;
 	int i;
 #ifdef WRITE_BACK
@@ -119,7 +119,7 @@ static void concat(CACHE_NAME, _random_replace)(uint32_t set, int way, uint32_t 
 	CACHE_NAME[set][way].dirty = false;
 #endif
 }
-#define __random_replace concat(CACHE_NAME, _random_replace)
+#define __cache_replace concat(CACHE_NAME, _replace)
 
 static void concat(concat(__, CACHE_NAME), _read)(hwaddr_t addr, void *data) {
 	cache_addr temp;
@@ -140,8 +140,8 @@ static void concat(concat(__, CACHE_NAME), _read)(hwaddr_t addr, void *data) {
 	if (i == NR_WAY) {
 #ifdef RANDOM_REPLACE
 		i = (replaced == -1) ? (rand() % NR_WAY) : replaced;
-		__random_replace(set, i, tag);
 #endif
+		__cache_replace(set, i, tag);
 	}
 	memcpy(data, CACHE_NAME[set][i].blocks + offset, DATA_LEN);
 }
@@ -174,8 +174,8 @@ static void concat(concat(__, CACHE_NAME), _write)(hwaddr_t addr, void *data, ui
 	else {
 #ifdef RANDOM_REPLACE
 		i = (replaced == -1) ? (rand() % NR_WAY) : replaced;
-		__random_replace(set, i, tag);
 #endif
+		__cache_replace(set, i, tag);
 		memcpy_with_mask(CACHE_NAME[set][i].block + offset, data, DATA_LEN, mask);
 #ifdef WRITE_BACK
 		CACHE_NAME[set][i].dirty = true;
@@ -222,7 +222,7 @@ static void concat(CACHE_NAME, _write)(hwaddr_t addr, size_t len, uint32_t data)
 #endif
 }
 
-#undef __random_replace
+#undef __cache_replace
 #undef __cache_read
 #undef __cache_write
 #undef cache_addr
