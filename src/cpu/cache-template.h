@@ -142,7 +142,6 @@ static void concat(concat(__, CACHE_NAME), _read)(hwaddr_t addr, void *data) {
 		i = (replaced == -1) ? (rand() % NR_WAY) : replaced;
 		__random_replace(set, i, tag);
 #endif
-		CACHE_NAME[set][i].valid = true;
 	}
 	memcpy(data, CACHE_NAME[set][i].blocks + offset, DATA_LEN);
 }
