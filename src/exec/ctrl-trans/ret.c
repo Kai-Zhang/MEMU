@@ -29,6 +29,6 @@ make_helper(ret_i) {
 	reg_l(R_ESP) += imm;
 
 	print_asm("ret $0x%x", imm);
-	return 1;
+	return 3;
 }
 
