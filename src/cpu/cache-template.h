@@ -135,6 +135,7 @@ static void concat(concat(__, CACHE_NAME), _read)(hwaddr_t addr, void *data) {
 		}
 		if (!CACHE_NAME[set][i].valid) {
 			replaced = i;
+			break;
 		}
 	}
 	if (i == NR_WAY) {
@@ -164,6 +165,7 @@ static void concat(concat(__, CACHE_NAME), _write)(hwaddr_t addr, void *data, ui
 #ifdef WRITE_ALLOCATE
 		if (!CACHE_NAME[set][i].valid) {
 			replaced = i;
+			break;
 		}
 #endif
 	}
