@@ -16,7 +16,7 @@ CFILES  = $(shell find src/ -name "*.c")
 OBJS    = $(CFILES:.c=.o)
 
 # test files
-TESTFILE = testcase/c/mov-c
+TESTFILE = testcase/c/struct
 C_TEST_FILE_LIST = $(shell find testcase/c/ -name "*.c")
 S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
 TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
@@ -37,13 +37,13 @@ loader:
 	xxd -i loader > src/elf/loader.c
 	rm loader
 
-run: memu
+run: memu $(TESTFILE)
 	./memu -d $(TESTFILE) 2>&1 | tee log.txt
 
-play: memu
+play: memu $(TESTFILE)
 	./memu -dq $(TESTFILE) 2>&1 | tee log.txt
 
-gdb: memu
+gdb: memu $(TESTFILE)
 	gdb --args ./memu -dq $(TESTFILE)
 
 test: memu $(TEST_FILE_LIST)
