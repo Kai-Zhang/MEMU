@@ -17,6 +17,7 @@ struct frame_stack func_stack;
 void cpu_exec(uint32_t);
 void restart();
 uint32_t expr_calc(char *, bool *);
+uint32_t dram_read(hwaddr_t, size_t);
 
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -153,7 +154,7 @@ static void cmd_x(char* amount_str, char* address_str) {
 		printf("%08x:  ", address & ~0xf);
 		while(blank_count-- > 0) { printf("   "); ++ column; }
 		for(; column < 0x10 && amount > 0; ++ column, -- amount) {
-			printf("%02x ", swaddr_read(address ++, 1));
+			printf("%02x ", dram_read(address ++, 1));
 		}
 		putchar('\n');
 		column = 0;
