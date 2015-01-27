@@ -1,38 +1,44 @@
-#include "memory.h"
-#include "common.h"
+#include "memu.h"
+#include "lib/misc.h"
 
-uint32_t dram_read(hwaddr_t, size_t);
-void dram_write(hwaddr_t, size_t, uint32_t);
+uint32_t dram_read(hwaddr_t addr, size_t len);
+void dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
-#define BLOCK_WIDTH 6		// 64 Bytes
-#define CACHE_WIDTH 16		// 64 kB
-#define SET_ASSOCIATIVE
-#define NR_WAY 8
-#define RANDOM_REPLACE
-#define WRITE_THROUGH
-#define NON_WRITE_ALLOCATE
-#define CACHE_NAME cache_l1
-#define __read_from_next_level dram_read
-#define __write_to_next_level dram_write
+#define BLOCK_SIZE_WIDTH 6
+#define SET_WIDTH 12
+#define NR_LINE 16
+#define Cache L2Cache
+#define cache L2cache
+#define next_level_read dram_read
+#define next_level_write dram_write
+#define WRITE_BACK
 #include "cache-template.h"
-#undef __write_to_next_level
-#undef __read_from_next_level
-#undef NON_WRITE_ALLOCATE
-#undef WRITE_THROUGH
-#undef RANDOM_REPLACE
-#undef NR_WAY
-#undef SET_ASSOCIATIVE
-#undef CACHE_WIDTH
-#undef BLOCK_WIDTH
+#undef WRITE_BACK
+
+#define BLOCK_SIZE_WIDTH 6
+#define SET_WIDTH 7
+#define NR_LINE 8
+#define Cache ICache
+#define cache Icache
+#define next_level_read L2cache_read
+#define next_level_write L2cache_write
+#define READ_ONLY
+#include "cache-template.h"
+#undef READ_ONLY
+
+#define BLOCK_SIZE_WIDTH 6
+#define SET_WIDTH 7
+#define NR_LINE 8
+#define Cache DCache
+#define cache Dcache
+#define next_level_read L2cache_read
+#define next_level_write L2cache_write
+#define SYNC Icache
+#include "cache-template.h"
+#undef SYNC
 
 void init_cache() {
-	init_cache_l1();
-}
-
-uint32_t cache_read(hwaddr_t addr, size_t len) {
-	return cache_l1_read(addr, len);
-}
-
-void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
-	cache_l1_write(addr, len, data);
+	init_Icache();
+	init_Dcache();
+	init_L2cache();
 }
