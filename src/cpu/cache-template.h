@@ -177,10 +177,10 @@ static void concat(concat(__, CACHE_NAME), _write)(hwaddr_t addr, void *data, ui
 #endif
 		__cache_replace(set, i, tag);
 		memcpy_with_mask(CACHE_NAME[set][i].block + offset, data, DATA_LEN, mask);
-#ifdef WRITE_BACK
-		CACHE_NAME[set][i].dirty = true;
-#endif
 	}
+#ifdef WRITE_BACK
+	CACHE_NAME[set][i].dirty = true;
+#endif
 #endif
 }
 
