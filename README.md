@@ -15,6 +15,7 @@ Thanks yzh and jyy
 MEMU is still building and is quite buggy.
 Bug that already know:
 * Overflow flag is not set in a right way when doing arithmetic instructions
+* Cache is not working well
 
 MEMU is just an extension of an experiment course.
 Thanks yzh for the main frame of the MEMU.
